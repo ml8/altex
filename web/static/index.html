@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>altex — Accessible LaTeX</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; color: #1a1a1a; }
+  h1 { font-size: 1.5rem; margin-bottom: .25rem; }
+  h1 span { font-weight: normal; color: #666; font-size: 1rem; }
+  form { background: #f7f7f7; border: 1px solid #ddd; border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; }
+  label { display: block; font-weight: 600; margin-top: .75rem; font-size: .9rem; }
+  label:first-child { margin-top: 0; }
+  input[type="file"] { display: block; margin-top: .25rem; }
+  .row { display: flex; gap: 1rem; align-items: end; margin-top: .75rem; }
+  .row label { flex: 1; margin-top: 0; }
+  select { width: 100%; padding: .3rem; border-radius: 4px; border: 1px solid #ccc; }
+  .check { display: flex; align-items: center; gap: .4rem; font-weight: normal; }
+  button { margin-top: 1rem; padding: .5rem 1.5rem; background: #0969da; color: #fff; border: none; border-radius: 6px; font-size: .95rem; cursor: pointer; }
+  button:disabled { background: #999; cursor: wait; }
+  #status { margin-top: 1rem; font-size: .9rem; color: #555; }
+  #results { display: none; margin-top: 1.5rem; }
+  #results h2 { font-size: 1.1rem; margin-bottom: .5rem; }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  th, td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid #ddd; }
+  th { background: #f0f0f0; }
+  .dl { display: inline-block; margin-top: .75rem; padding: .45rem 1.2rem; background: #1a7f37; color: #fff; border-radius: 6px; text-decoration: none; font-size: .9rem; }
+  .dl:hover { background: #15652c; }
+  .error { color: #cf222e; font-weight: 600; }
+  .meta td:first-child { font-weight: 600; width: 45%; }
+</style>
+</head>
+<body>
+
+<h1>altex <span>Accessible LaTeX</span></h1>
+<p>Upload your LaTeX source and compiled PDF to generate an accessibility-tagged PDF.</p>
+
+<form id="form">
+  <label>LaTeX source (.tex)
+    <input type="file" id="tex" accept=".tex" required>
+  </label>
+  <label>Compiled PDF (.pdf)
+    <input type="file" id="pdf" accept=".pdf" required>
+  </label>
+  <div class="row">
+    <label>Language
+      <select id="lang">
+        <option value="en" selected>English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+      </select>
+    </label>
+    <label class="check">
+      <input type="checkbox" id="fix_enc"> Fix font encoding (Ghostscript)
+    </label>
+  </div>
+  <button type="submit" id="btn">Tag PDF</button>
+</form>
+<div id="status"></div>
+
+<div id="results">
+  <h2>Accessibility Summary</h2>
+  <table class="meta">
+    <tbody id="meta-body"></tbody>
+  </table>
+  <h2 style="margin-top:1rem">Structure Elements</h2>
+  <table>
+    <thead><tr><th>Tag</th><th>Count</th></tr></thead>
+    <tbody id="elem-body"></tbody>
+  </table>
+  <a id="dl-link" class="dl" href="#">⬇ Download Tagged PDF</a>
+</div>
+
+<script>
+const form = document.getElementById('form');
+const btn = document.getElementById('btn');
+const status = document.getElementById('status');
+const results = document.getElementById('results');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const tex = document.getElementById('tex').files[0];
+  const pdf = document.getElementById('pdf').files[0];
+  if (!tex || !pdf) return;
+
+  btn.disabled = true;
+  status.textContent = 'Processing…';
+  status.className = '';
+  results.style.display = 'none';
+
+  const fd = new FormData();
+  fd.append('tex', tex);
+  fd.append('pdf', pdf);
+  fd.append('lang', document.getElementById('lang').value);
+  fd.append('fix_encoding', document.getElementById('fix_enc').checked ? 'true' : 'false');
+
+  try {
+    const res = await fetch('/api/tag', { method: 'POST', body: fd });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Server error');
+
+    // Metadata table.
+    const mb = document.getElementById('meta-body');
+    mb.innerHTML = '';
+    const meta = [
+      ['Title', data.title],
+      ['Language', data.lang],
+      ['Pages', data.pages],
+      ['Elements with alt-text', data.alt_count],
+      ['BDC markers (page 1)', data.bdc_markers_page1],
+      ['Marked as tagged', data.marked ? '✅ Yes' : '❌ No'],
+    ];
+    for (const [k, v] of meta) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${k}</td><td>${v}</td>`;
+      mb.appendChild(tr);
+    }
+
+    // Elements table.
+    const eb = document.getElementById('elem-body');
+    eb.innerHTML = '';
+    for (const [tag, count] of Object.entries(data.elements).sort()) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${tag}</td><td>${count}</td>`;
+      eb.appendChild(tr);
+    }
+
+    document.getElementById('dl-link').href = data.download_url;
+    results.style.display = 'block';
+    status.textContent = 'Done.';
+  } catch (err) {
+    status.textContent = err.message;
+    status.className = 'error';
+  } finally {
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

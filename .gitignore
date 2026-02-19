@@ -1,0 +1,17 @@
+resume
+theory
+
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Demo output
+demos/output/
+
+# Web temp files
+web/uploads/

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "altex"
+version = "0.1.0"
+description = "Post-process LaTeX-generated PDFs to embed accessibility tags"
+requires-python = ">=3.10"
+dependencies = [
+    "pikepdf>=8.0",
+    "pymupdf>=1.23",
+    "pylatexenc>=2.10,<3",
+]
+
+[project.scripts]
+altex = "altex.cli:main"
