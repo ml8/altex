@@ -10,6 +10,9 @@ __pycache__/
 .venv/
 *.egg-info/
 
+# Node
+node_modules/
+
 # Demo output
 demos/output/
 

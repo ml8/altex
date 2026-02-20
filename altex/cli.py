@@ -4,6 +4,7 @@ Usage
 -----
     python -m altex source.tex input.pdf -o output.pdf
     python -m altex source.tex input.pdf --fix-encoding -o output.pdf
+    python -m altex source.tex input.pdf --math-speech sre -o output.pdf
     python -m altex source.tex --dump-tree
 """
 
@@ -14,6 +15,7 @@ import sys
 from pathlib import Path
 
 from altex.latex_parser import extract_title, parse
+from altex.models import DocumentNode, Tag
 from altex.pdf_tagger import tag
 
 
@@ -22,6 +24,18 @@ def main(argv: list[str] | None = None) -> None:
 
     # Step 1: parse LaTeX source into a semantic tree.
     tree = parse(args.tex)
+
+    # Generate alt HTML from raw tree (before speech conversion).
+    alt_html = None
+    if args.embed_alt and not args.dump_tree:
+        from altex.alt_document import generate_alt_html
+
+        title_for_alt = extract_title(args.tex) or args.tex.stem
+        alt_html = generate_alt_html(tree, title_for_alt)
+
+    # Convert formula alt-text to speech.
+    if args.math_speech != "none":
+        _apply_math_speech(tree, args.math_speech)
 
     # Optional: dump the intermediate tree as JSON and exit.
     if args.dump_tree:
@@ -48,11 +62,40 @@ def main(argv: list[str] | None = None) -> None:
     title = extract_title(args.tex)
 
     tag(pdf_input, tree, output, lang=args.lang, title=title)
+
+    # Embed the alternative HTML document.
+    if alt_html:
+        from altex.alt_document import embed_alt_document
+
+        embed_alt_document(output, alt_html, output)
+
     print(f"Tagged PDF written to {output}")
 
     # Clean up intermediate file.
     if args.fix_encoding:
         intermediate.unlink(missing_ok=True)
+
+
+def _apply_math_speech(tree: DocumentNode, engine: str) -> None:
+    """Walk the tree, collect formula texts, convert in batch, update nodes."""
+    from altex.math_speech import latex_to_speech
+
+    formula_nodes: list[DocumentNode] = []
+    _collect_formulas(tree, formula_nodes)
+    if not formula_nodes:
+        return
+
+    raw_texts = [n.text for n in formula_nodes]
+    speeches = latex_to_speech(raw_texts, engine=engine)
+    for node, speech in zip(formula_nodes, speeches):
+        node.text = speech
+
+
+def _collect_formulas(node: DocumentNode, out: list[DocumentNode]) -> None:
+    if node.tag == Tag.FORMULA and node.text:
+        out.append(node)
+    for child in node.children:
+        _collect_formulas(child, out)
 
 
 def _parse_args(argv: list[str] | None) -> argparse.Namespace:
@@ -77,5 +120,16 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
         "--fix-encoding",
         action="store_true",
         help="Pre-process PDF with Ghostscript to fix font encoding (requires gs)",
+    )
+    p.add_argument(
+        "--math-speech",
+        choices=["sre", "mathjax", "none"],
+        default="none",
+        help="Math-to-speech engine (default: none — raw LaTeX as alt-text)",
+    )
+    p.add_argument(
+        "--embed-alt",
+        action="store_true",
+        help="Embed an accessible HTML alternative as a PDF attachment",
     )
     return p.parse_args(argv)

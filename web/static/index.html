@@ -56,6 +56,18 @@
       <input type="checkbox" id="fix_enc"> Fix font encoding (Ghostscript)
     </label>
   </div>
+  <div class="row">
+    <label>Math-to-speech
+      <select id="math_speech">
+        <option value="none" selected>None (raw LaTeX)</option>
+        <option value="sre">SRE (latex2mathml + Speech Rule Engine)</option>
+        <option value="mathjax">MathJax (mathjax-full + SRE)</option>
+      </select>
+    </label>
+    <label class="check">
+      <input type="checkbox" id="embed_alt"> Embed HTML alternative
+    </label>
+  </div>
   <button type="submit" id="btn">Tag PDF</button>
 </form>
 <div id="status"></div>
@@ -95,6 +107,8 @@ form.addEventListener('submit', async (e) => {
   fd.append('pdf', pdf);
   fd.append('lang', document.getElementById('lang').value);
   fd.append('fix_encoding', document.getElementById('fix_enc').checked ? 'true' : 'false');
+  fd.append('math_speech', document.getElementById('math_speech').value);
+  fd.append('embed_alt', document.getElementById('embed_alt').checked ? 'true' : 'false');
 
   try {
     const res = await fetch('/api/tag', { method: 'POST', body: fd });
@@ -111,6 +125,7 @@ form.addEventListener('submit', async (e) => {
       ['Elements with alt-text', data.alt_count],
       ['BDC markers (page 1)', data.bdc_markers_page1],
       ['Marked as tagged', data.marked ? '✅ Yes' : '❌ No'],
+      ['Alt document embedded', data.alt_document ? '✅ Yes' : '—'],
     ];
     for (const [k, v] of meta) {
       const tr = document.createElement('tr');

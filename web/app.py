@@ -45,6 +45,8 @@ def api_tag():
 
     lang = request.form.get("lang", "en")
     fix_encoding = request.form.get("fix_encoding") == "true"
+    math_speech = request.form.get("math_speech", "none")
+    embed_alt = request.form.get("embed_alt") == "true"
 
     work = Path(tempfile.mkdtemp(prefix="altex_job_"))
     try:
@@ -64,9 +66,42 @@ def api_tag():
         # Run the pipeline.
         tree = parse(tex_path)
         title = extract_title(tex_path) or tex_path.stem
+
+        # Generate alt HTML from raw tree (before speech conversion).
+        alt_html = None
+        if embed_alt:
+            from altex.alt_document import generate_alt_html
+            alt_html = generate_alt_html(tree, title)
+
+        # Optional math-to-speech conversion.
+        if math_speech != "none":
+            from altex.math_speech import latex_to_speech
+            from altex.models import DocumentNode, Tag
+
+            formula_nodes: list[DocumentNode] = []
+
+            def collect(n: DocumentNode) -> None:
+                if n.tag == Tag.FORMULA and n.text:
+                    formula_nodes.append(n)
+                for c in n.children:
+                    collect(c)
+
+            collect(tree)
+            if formula_nodes:
+                speeches = latex_to_speech(
+                    [n.text for n in formula_nodes], engine=math_speech
+                )
+                for node, speech in zip(formula_nodes, speeches):
+                    node.text = speech
+
         result_id = uuid.uuid4().hex[:12]
         out_path = _RESULTS_DIR / f"{result_id}.pdf"
         tag(pdf_path, tree, out_path, lang=lang, title=title)
+
+        # Embed alternative HTML.
+        if alt_html:
+            from altex.alt_document import embed_alt_document
+            embed_alt_document(out_path, alt_html, out_path)
 
         summary = _summarize(out_path, tree)
         summary["id"] = result_id
@@ -123,6 +158,8 @@ def _summarize(pdf_path: Path, tree) -> dict:
     with pdf.open_metadata() as meta:
         title = meta.get("dc:title", pdf_path.stem)
 
+    has_alt_doc = "accessible_alt.html" in pdf.attachments
+
     return {
         "title": title,
         "lang": str(pdf.Root.get("/Lang", "")),
@@ -131,4 +168,5 @@ def _summarize(pdf_path: Path, tree) -> dict:
         "alt_count": alt_count,
         "bdc_markers_page1": bdc_count,
         "marked": True,
+        "alt_document": has_alt_doc,
     }

@@ -1,3 +1,4 @@
 pikepdf>=8.0
 pymupdf>=1.23
 pylatexenc>=2.10,<3
+latex2mathml>=3.70

@@ -39,10 +39,22 @@ altex/                     # Core pipeline (no web dependencies)
 │                          #   2. Tags content streams (BDC/EMC with MCIDs)
 │                          #   3. Builds structure tree + parent tree
 │                          #   4. Links structure elements to MCIDs via text matching
+├── math_speech.py         # latex_to_speech(formulas, engine) → list[str]
+│                          #   Pluggable: "sre" (latex2mathml+SRE), "mathjax", "none"
+│                          #   Isolated: imports only stdlib + latex2mathml
+│                          #   Uses short-lived batch subprocess (not IPC daemon)
+├── alt_document.py        # generate_alt_html(tree, title) → str
+│                          #   embed_alt_document(pdf_path, html, output_path)
+│                          #   Isolated: imports only models + pikepdf + latex2mathml
 ├── encoding_fixer.py      # fix_encoding(input_path, output_path)
 │                          #   Isolated: shells out to Ghostscript (gs)
 ├── cli.py                 # CLI: python -m altex source.tex input.pdf -o out.pdf
 └── __main__.py            # Entry point for python -m altex
+
+scripts/                   # Node.js worker scripts for math-to-speech
+├── sre_worker.js          # Batch MathML→speech via SRE (stdin/stdout)
+├── mathjax_worker.js      # Batch LaTeX→speech via mathjax-full+SRE
+└── run-local.sh           # Start Flask dev server locally
 
 web/                       # Flask web interface
 ├── app.py                 # POST /api/tag, GET /api/download/<id>, GET /
@@ -50,15 +62,15 @@ web/                       # Flask web interface
 
 docs/                      # Project documentation
 ├── design.md              # Architecture, design decisions, feature status
-└── pdf-tagging-reference.md  # PDF structure tag types reference
+├── pdf-tagging-reference.md  # PDF structure tag types reference
+└── math-speech-and-alt-document.md  # Phase 4 design plan
 
 demos/                     # Demo scripts (run against theory/ test data)
 ├── demo_compare.sh        # Before/after comparison
 ├── demo_math_alttext.sh   # Math formula alt-text showcase
+├── demo_math_speech.sh    # Math-to-speech engine comparison
+├── demo_alt_document.sh   # Embedded alternative HTML demo
 └── demo_tag_all.sh        # Batch-tag all test docs (both variants)
-
-scripts/
-└── run-local.sh           # Start Flask dev server locally
 ```
 
 ## How to Build and Run

@@ -1,0 +1,28 @@
+{
+  "name": "accessible-latex",
+  "version": "1.0.0",
+  "description": "**altex** — a proof-of-concept tool that post-processes LaTeX-generated PDFs to embed accessibility structure tags and alt-text.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ml8/accessible-latex.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/ml8/accessible-latex/issues"
+  },
+  "homepage": "https://github.com/ml8/accessible-latex#readme",
+  "dependencies": {
+    "mathjax-full": "^3.2.1",
+    "speech-rule-engine": "^5.0.0-beta.6"
+  }
+}

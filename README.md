@@ -6,10 +6,33 @@ to embed accessibility structure tags and alt-text.
 ## Quick start
 
 ```bash
-# Set up
+# Install everything
+make setup
+
+# Tag a PDF
+make tag TEX=source.tex PDF=input.pdf OUT=output.pdf
+
+# Or use the CLI directly
+.venv/bin/python3 -m altex source.tex input.pdf -o output.pdf
+
+# Start the web interface
+make run
+# → http://localhost:5001
+
+# Run all demos
+make demo
+
+# See all available commands
+make help
+```
+
+### Manual setup (without Make)
+
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
+npm install --production    # for math-to-speech
 
 # Tag a PDF (two inputs: LaTeX source + compiled PDF)
 python -m altex source.tex input.pdf -o output.pdf
@@ -58,6 +81,8 @@ Options:
   --dump-tree       Print the semantic tree as JSON and exit (no PDF needed)
   --lang LANG       Document language (default: en)
   --fix-encoding    Pre-process PDF with Ghostscript to fix font encoding
+  --math-speech ENGINE  Math-to-speech engine: sre, mathjax, or none (default: none)
+  --embed-alt       Embed an accessible HTML alternative as a PDF attachment
 ```
 
 ## Web interface
@@ -65,13 +90,13 @@ Options:
 Upload `.tex` + `.pdf` in a browser, get a tagged PDF + accessibility summary.
 
 ```bash
-# Option 1: Local dev server
-./scripts/run-local.sh
-# → open http://localhost:5000
+# Local dev server
+make run
+# → http://localhost:5001
 
-# Option 2: Docker
-docker compose up --build
-# → open http://localhost:5000
+# Docker
+make docker-run
+# → http://localhost:5000
 ```
 
 The web UI shows an accessibility summary (structure element counts, alt-text
@@ -87,22 +112,30 @@ altex/
 ├── models.py          # Tag enum + DocumentNode dataclass (shared interface)
 ├── latex_parser.py    # LaTeX source → DocumentNode tree
 ├── pdf_tagger.py      # Embed structure tree + MCIDs into PDF
+├── math_speech.py     # Pluggable math-to-speech (sre/mathjax/none)
+├── alt_document.py    # Generate + embed alternative HTML in PDF
 └── encoding_fixer.py  # Isolated Ghostscript wrapper (no altex imports)
 web/
 ├── app.py             # Flask API service
 └── static/
     └── index.html     # Single-file frontend (HTML/CSS/JS, no build step)
+scripts/
+├── sre_worker.js      # Batch MathML→speech via SRE
+├── mathjax_worker.js  # Batch LaTeX→speech via mathjax-full+SRE
+└── run-local.sh       # Start dev server without Docker
 docs/
 ├── design.md          # Architecture and design decisions
-└── pdf-tagging-reference.md  # PDF structure tag reference
+├── pdf-tagging-reference.md  # PDF structure tag reference
+└── math-speech-and-alt-document.md  # Phase 4 design plan
 demos/
 ├── demo_compare.sh    # Before/after comparison with encoding variant
 ├── demo_math_alttext.sh  # Math formula alt-text showcase
+├── demo_math_speech.sh   # Math-to-speech engine comparison
+├── demo_alt_document.sh  # Embedded alternative HTML demo
 └── demo_tag_all.sh    # Batch-tag all test documents
-Dockerfile             # Single container (Flask + Ghostscript)
+Makefile               # Build, run, test, clean commands
+Dockerfile             # Single container (Flask + Ghostscript + Node)
 docker-compose.yml     # Convenience wrapper
-scripts/
-└── run-local.sh       # Start dev server without Docker
 ```
 
 ## Architecture

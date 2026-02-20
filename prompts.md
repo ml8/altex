@@ -51,3 +51,19 @@ ok, let's quit our session. Let's make sure that this is ready to hand off to an
 ## Prompt 13
 
 Please emit all of my prompts to a file named prompts.md
+
+## Prompt 14
+
+An opencode session was modifying the project to add support for math to speech by shelling out to a node SRE. It was also planning on implementing an embedded alternate document feature as a fallback. Let's have you pick up this work. Please revert the current changes and give me an implementation plan for adding support for math-to-speech (provide me a few options) and for embedding the entire document as html or markdown in order to give the user a fallback option on complex documents
+
+## Prompt 15
+
+Ok, I have added my feedback to your plan. Please review my feedback and follow my instructions to update the plan and provide answers to my questions. Afterward, allow me to re-review the plan and provide final implementation shaping before you begin code changes.
+
+## Prompt 16
+
+Perfect. Please add the plan to the docs/ directory with a name that corresponds to the features we're implementing. Then begin implementation. Please create appropriate demo pipelines.
+
+## Prompt 17
+
+Please create a Makefile to install dependencies, run common commands, build the docker container, and build the project for running local. Also include a clean target that cleans up demo output. Also make sure that you append our prompts to the prompts.md file. Update any necessary documents as well.
