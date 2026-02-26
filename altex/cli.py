@@ -50,13 +50,26 @@ def main(argv: list[str] | None = None) -> None:
     pdf_input = args.pdf
     output = args.output or args.pdf.with_stem(args.pdf.stem + "_tagged")
 
-    # Optional: fix font encoding via Ghostscript first.
+    # Fix font encoding via Ghostscript (on by default for PDF/UA §7.21.7
+    # compliance).  Falls back gracefully if gs is not installed.
+    encoding_fixed = False
+    intermediate = None
     if args.fix_encoding:
-        from altex.encoding_fixer import fix_encoding
+        from altex.encoding_fixer import GhostscriptNotFoundError, fix_encoding
 
         intermediate = output.with_stem(output.stem + "_tmp_enc")
-        fix_encoding(pdf_input, intermediate)
-        pdf_input = intermediate
+        try:
+            fix_encoding(pdf_input, intermediate)
+            pdf_input = intermediate
+            encoding_fixed = True
+        except GhostscriptNotFoundError:
+            print(
+                "warning: Ghostscript not found — skipping font encoding fix.\n"
+                "  Install with: brew install ghostscript (macOS) or "
+                "apt install ghostscript (Linux)\n"
+                "  Use --no-fix-encoding to suppress this warning.",
+                file=sys.stderr,
+            )
 
     # Extract title from LaTeX source.
     title = extract_title(args.tex)
@@ -72,7 +85,7 @@ def main(argv: list[str] | None = None) -> None:
     print(f"Tagged PDF written to {output}")
 
     # Clean up intermediate file.
-    if args.fix_encoding:
+    if encoding_fixed and intermediate:
         intermediate.unlink(missing_ok=True)
 
 
@@ -80,8 +93,7 @@ def _apply_math_speech(tree: DocumentNode, engine: str) -> None:
     """Walk the tree, collect formula texts, convert in batch, update nodes."""
     from altex.math_speech import latex_to_speech
 
-    formula_nodes: list[DocumentNode] = []
-    _collect_formulas(tree, formula_nodes)
+    formula_nodes = tree.collect_by_tag(Tag.FORMULA)
     if not formula_nodes:
         return
 
@@ -89,13 +101,6 @@ def _apply_math_speech(tree: DocumentNode, engine: str) -> None:
     speeches = latex_to_speech(raw_texts, engine=engine)
     for node, speech in zip(formula_nodes, speeches):
         node.text = speech
-
-
-def _collect_formulas(node: DocumentNode, out: list[DocumentNode]) -> None:
-    if node.tag == Tag.FORMULA and node.text:
-        out.append(node)
-    for child in node.children:
-        _collect_formulas(child, out)
 
 
 def _parse_args(argv: list[str] | None) -> argparse.Namespace:
@@ -119,7 +124,14 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
     p.add_argument(
         "--fix-encoding",
         action="store_true",
-        help="Pre-process PDF with Ghostscript to fix font encoding (requires gs)",
+        default=True,
+        help="Pre-process PDF with Ghostscript to fix font encoding (default: on)",
+    )
+    p.add_argument(
+        "--no-fix-encoding",
+        action="store_false",
+        dest="fix_encoding",
+        help="Skip Ghostscript font encoding fix",
     )
     p.add_argument(
         "--math-speech",

@@ -5,6 +5,11 @@ Routes
     GET  /                  — serve the frontend
     POST /api/tag           — upload .tex + .pdf, run pipeline, return summary
     GET  /api/download/<id> — download a tagged PDF
+
+The /api/tag endpoint returns a JSON summary that includes:
+- Structure element counts and alt-text coverage
+- verapdf PDF/UA-1 validation results (before and after tagging)
+- Rules fixed by altex and any remaining failures
 """
 
 from __future__ import annotations
@@ -19,6 +24,7 @@ from flask import Flask, jsonify, request, send_file
 
 from altex.latex_parser import extract_title, parse
 from altex.pdf_tagger import tag
+from altex.verapdf import validate as validate_pdfua
 
 app = Flask(__name__, static_folder="static", static_url_path="")
 
@@ -44,7 +50,8 @@ def api_tag():
         return jsonify(error="Both .tex and .pdf files are required."), 400
 
     lang = request.form.get("lang", "en")
-    fix_encoding = request.form.get("fix_encoding") == "true"
+    # Fix encoding is on by default (matches CLI behavior).
+    fix_encoding = request.form.get("fix_encoding", "true") != "false"
     math_speech = request.form.get("math_speech", "none")
     embed_alt = request.form.get("embed_alt") == "true"
 
@@ -55,13 +62,18 @@ def api_tag():
         tex_file.save(tex_path)
         pdf_file.save(pdf_path)
 
-        # Optional Ghostscript encoding fix.
-        if fix_encoding:
-            from altex.encoding_fixer import fix_encoding as gs_fix
+        # Run verapdf on the ORIGINAL PDF (before tagging).
+        validation_before = validate_pdfua(pdf_path)
 
-            gs_out = work / "gs_encoded.pdf"
-            gs_fix(pdf_path, gs_out)
-            pdf_path = gs_out
+        # Optional Ghostscript encoding fix (on by default).
+        if fix_encoding:
+            try:
+                from altex.encoding_fixer import fix_encoding as gs_fix
+                gs_out = work / "gs_encoded.pdf"
+                gs_fix(pdf_path, gs_out)
+                pdf_path = gs_out
+            except Exception:
+                pass  # Graceful fallback if gs not available.
 
         # Run the pipeline.
         tree = parse(tex_path)
@@ -76,17 +88,9 @@ def api_tag():
         # Optional math-to-speech conversion.
         if math_speech != "none":
             from altex.math_speech import latex_to_speech
-            from altex.models import DocumentNode, Tag
+            from altex.models import Tag
 
-            formula_nodes: list[DocumentNode] = []
-
-            def collect(n: DocumentNode) -> None:
-                if n.tag == Tag.FORMULA and n.text:
-                    formula_nodes.append(n)
-                for c in n.children:
-                    collect(c)
-
-            collect(tree)
+            formula_nodes = tree.collect_by_tag(Tag.FORMULA)
             if formula_nodes:
                 speeches = latex_to_speech(
                     [n.text for n in formula_nodes], engine=math_speech
@@ -103,9 +107,15 @@ def api_tag():
             from altex.alt_document import embed_alt_document
             embed_alt_document(out_path, alt_html, out_path)
 
+        # Run verapdf on the TAGGED PDF (after tagging).
+        validation_after = validate_pdfua(out_path)
+
         summary = _summarize(out_path, tree)
         summary["id"] = result_id
         summary["download_url"] = f"/api/download/{result_id}"
+        summary["validation_before"] = validation_before
+        summary["validation_after"] = validation_after
+
         return jsonify(summary)
 
     except Exception as e:
@@ -170,3 +180,9 @@ def _summarize(pdf_path: Path, tree) -> dict:
         "marked": True,
         "alt_document": has_alt_doc,
     }
+
+
+# ---------------------------------------------------------------------------
+# verapdf validation
+# ---------------------------------------------------------------------------
+

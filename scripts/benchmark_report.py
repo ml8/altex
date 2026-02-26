@@ -22,48 +22,34 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-
-# Test corpus: (tex_path, pdf_path) pairs relative to ROOT
-TEST_PAIRS = [
-    ("theory/364syllabus_fall12.tex", "theory/364syllabus_fall12.pdf"),
-    ("theory/exam/exam1.tex", "theory/exam/exam1.pdf"),
-    ("theory/exam/exam2.tex", "theory/exam/exam2.pdf"),
-    ("theory/exam/exam3.tex", "theory/exam/exam3.pdf"),
-    ("theory/hw/01induction.tex", "theory/hw/01induction.pdf"),
-    ("theory/hw/01induction-sol.tex", "theory/hw/01induction-sol.pdf"),
-    ("theory/hw/02pumping-sol.tex", "theory/hw/02pumping-sol.pdf"),
-    ("theory/lecture/01problems.tex", "theory/lecture/01problems.pdf"),
-    ("theory/lecture/04closure.tex", "theory/lecture/04closure.pdf"),
-    ("theory/lecture/05nfa.tex", "theory/lecture/05nfa.pdf"),
-    ("theory/lecture/07regexp.tex", "theory/lecture/07regexp.pdf"),
-]
-
-EXTERNAL_DIR = ROOT / "benchmarks" / "external"
-
-# External benchmark corpus: (tex_path, pdf_path) pairs relative to ROOT
-# These are publicly available .edu-sourced documents; only used when
-# benchmarks/external/ exists.
-EXTERNAL_PAIRS = [
-    ("benchmarks/external/paper/wm-thesis.tex", "benchmarks/external/paper/wm-thesis.pdf"),
-    ("benchmarks/external/beamer/tufts-beamer.tex", "benchmarks/external/beamer/tufts-beamer.pdf"),
-    ("benchmarks/external/cv/duke-cv.tex", "benchmarks/external/cv/duke-cv.pdf"),
-    ("benchmarks/external/syllabus/utoledo-math2850.tex", "benchmarks/external/syllabus/utoledo-math2850.pdf"),
-    ("benchmarks/external/exam/duke-exam.tex", "benchmarks/external/exam/duke-exam.pdf"),
-    ("benchmarks/external/homework/bu-cs237-hw.tex", "benchmarks/external/homework/bu-cs237-hw.pdf"),
-    ("benchmarks/external/homework/uw-amath586-hw.tex", "benchmarks/external/homework/uw-amath586-hw.pdf"),
-    ("benchmarks/external/beamer/stanford-beamer.tex", "benchmarks/external/beamer/stanford-beamer.pdf"),
-    ("benchmarks/external/beamer/ucdavis-beamer.tex", "benchmarks/external/beamer/ucdavis-beamer.pdf"),
-    ("benchmarks/external/beamer/metropolis-demo.tex", "benchmarks/external/beamer/metropolis-demo.pdf"),
-    ("benchmarks/external/homework/ucsd-math184a-hw.tex", "benchmarks/external/homework/ucsd-math184a-hw.pdf"),
-    ("benchmarks/external/homework/ucsd-math184a-hw5.tex", "benchmarks/external/homework/ucsd-math184a-hw5.pdf"),
-    ("benchmarks/external/homework/upenn-cs446-hw.tex", "benchmarks/external/homework/upenn-cs446-hw.pdf"),
-    ("benchmarks/external/homework/jdavis-hw-template.tex", "benchmarks/external/homework/jdavis-hw-template.pdf"),
-    ("benchmarks/external/homework/sfsu-csc746-hw.tex", "benchmarks/external/homework/sfsu-csc746-hw.pdf"),
-    ("benchmarks/external/paper/cambridge-dist-sys.tex", "benchmarks/external/paper/cambridge-dist-sys.pdf"),
-    ("benchmarks/external/paper/elegantpaper-en.tex", "benchmarks/external/paper/elegantpaper-en.pdf"),
-]
-
+BENCHMARKS_DIR = ROOT / "benchmarks"
 OUTPUT_DIR = ROOT / "demos" / "output"
+
+# Benchmark corpus: (tex_path, pdf_path) pairs relative to ROOT.
+# All documents live under benchmarks/ — .edu-sourced, diverse CS topics.
+BENCHMARK_PAIRS = [
+    # Papers and lecture notes
+    ("benchmarks/paper/wm-thesis.tex", "benchmarks/paper/wm-thesis.pdf"),
+    ("benchmarks/paper/cambridge-dist-sys.tex", "benchmarks/paper/cambridge-dist-sys.pdf"),
+    ("benchmarks/paper/elegantpaper-en.tex", "benchmarks/paper/elegantpaper-en.pdf"),
+    # Beamer presentations
+    ("benchmarks/beamer/tufts-beamer.tex", "benchmarks/beamer/tufts-beamer.pdf"),
+    ("benchmarks/beamer/stanford-beamer.tex", "benchmarks/beamer/stanford-beamer.pdf"),
+    ("benchmarks/beamer/ucdavis-beamer.tex", "benchmarks/beamer/ucdavis-beamer.pdf"),
+    ("benchmarks/beamer/metropolis-demo.tex", "benchmarks/beamer/metropolis-demo.pdf"),
+    # CV, syllabus, exam
+    ("benchmarks/cv/duke-cv.tex", "benchmarks/cv/duke-cv.pdf"),
+    ("benchmarks/syllabus/utoledo-math2850.tex", "benchmarks/syllabus/utoledo-math2850.pdf"),
+    ("benchmarks/exam/duke-exam.tex", "benchmarks/exam/duke-exam.pdf"),
+    # Homework assignments (probability, numerical methods, ML, combinatorics, HPC)
+    ("benchmarks/homework/bu-cs237-hw.tex", "benchmarks/homework/bu-cs237-hw.pdf"),
+    ("benchmarks/homework/uw-amath586-hw.tex", "benchmarks/homework/uw-amath586-hw.pdf"),
+    ("benchmarks/homework/ucsd-math184a-hw.tex", "benchmarks/homework/ucsd-math184a-hw.pdf"),
+    ("benchmarks/homework/ucsd-math184a-hw5.tex", "benchmarks/homework/ucsd-math184a-hw5.pdf"),
+    ("benchmarks/homework/upenn-cs446-hw.tex", "benchmarks/homework/upenn-cs446-hw.pdf"),
+    ("benchmarks/homework/jdavis-hw-template.tex", "benchmarks/homework/jdavis-hw-template.pdf"),
+    ("benchmarks/homework/sfsu-csc746-hw.tex", "benchmarks/homework/sfsu-csc746-hw.pdf"),
+]
 
 
 @dataclass
@@ -142,11 +128,11 @@ def run_verapdf(pdf_path: Path) -> ValidationResult:
         return ValidationResult(pdf_path=str(pdf_path), error=f"Parse error: {e}")
 
 
-def run_altex(tex_path: Path, pdf_path: Path, output: Path, fix_encoding: bool = False) -> bool:
+def run_altex(tex_path: Path, pdf_path: Path, output: Path, fix_encoding: bool = True) -> bool:
     """Run altex pipeline on a single document."""
     cmd = [sys.executable, "-m", "altex", str(tex_path), str(pdf_path), "-o", str(output)]
-    if fix_encoding:
-        cmd.append("--fix-encoding")
+    if not fix_encoding:
+        cmd.append("--no-fix-encoding")
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=str(ROOT))
         if result.returncode != 0:
@@ -160,13 +146,7 @@ def run_altex(tex_path: Path, pdf_path: Path, output: Path, fix_encoding: bool =
 
 def run_benchmarks(tag_first: bool = False) -> list[DocumentBenchmark]:
     """Run full benchmark suite."""
-    results = _run_pairs(TEST_PAIRS, tag_first)
-
-    # Include external corpus when the directory exists
-    if EXTERNAL_DIR.is_dir():
-        results.extend(_run_pairs(EXTERNAL_PAIRS, tag_first))
-
-    return results
+    return _run_pairs(BENCHMARK_PAIRS, tag_first)
 
 
 def _run_pairs(pairs: list[tuple[str, str]], tag_first: bool) -> list[DocumentBenchmark]:
@@ -197,7 +177,9 @@ def _run_pairs(pairs: list[tuple[str, str]], tag_first: bool) -> list[DocumentBe
         encoded_path = OUTPUT_DIR / f"{name}_tagged_encoded.pdf"
 
         if tag_first:
-            run_altex(tex_path, pdf_path, tagged_path)
+            # "tagged" = without Ghostscript encoding fix.
+            run_altex(tex_path, pdf_path, tagged_path, fix_encoding=False)
+            # "encoded" = with Ghostscript (now the default).
             if _has_gs():
                 run_altex(tex_path, pdf_path, encoded_path, fix_encoding=True)
 
@@ -358,7 +340,7 @@ def main():
     benchmarks = run_benchmarks(tag_first=args.tag_first)
 
     if not benchmarks:
-        print("No test PDFs found. Ensure theory/ directory exists.", file=sys.stderr)
+        print("No test PDFs found. Ensure benchmarks/ directory exists.", file=sys.stderr)
         sys.exit(1)
 
     # Print report

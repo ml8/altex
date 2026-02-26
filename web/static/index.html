@@ -29,6 +29,18 @@
   .dl:hover { background: #15652c; }
   .error { color: #cf222e; font-weight: 600; }
   .meta td:first-child { font-weight: 600; width: 45%; }
+  .validation { background: #f0f8f0; border: 1px solid #c6e6c6; border-radius: 8px; padding: 1rem; margin-top: 1rem; }
+  .validation.warn { background: #fff8e1; border-color: #e6d9a0; }
+  .validation h3 { font-size: .95rem; margin: 0 0 .5rem 0; }
+  .validation .stat { font-size: 2rem; font-weight: 700; margin: .25rem 0; }
+  .validation .stat.good { color: #1a7f37; }
+  .validation .stat.warn { color: #9a6700; }
+  .validation .detail { font-size: .8rem; color: #555; margin-top: .25rem; }
+  .val-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+  .rule-list { font-size: .8rem; margin-top: .5rem; }
+  .rule-list li { margin-bottom: .25rem; }
+  .rule-fixed { color: #1a7f37; }
+  .rule-remaining { color: #9a6700; }
 </style>
 </head>
 <body>
@@ -53,7 +65,7 @@
       </select>
     </label>
     <label class="check">
-      <input type="checkbox" id="fix_enc"> Fix font encoding (Ghostscript)
+      <input type="checkbox" id="fix_enc" checked> Fix font encoding (Ghostscript)
     </label>
   </div>
   <div class="row">
@@ -73,7 +85,9 @@
 <div id="status"></div>
 
 <div id="results">
-  <h2>Accessibility Summary</h2>
+  <h2>PDF/UA Validation</h2>
+  <div id="validation-section"></div>
+  <h2 style="margin-top:1rem">Accessibility Summary</h2>
   <table class="meta">
     <tbody id="meta-body"></tbody>
   </table>
@@ -114,6 +128,67 @@ form.addEventListener('submit', async (e) => {
     const res = await fetch('/api/tag', { method: 'POST', body: fd });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Server error');
+
+    // Validation comparison (before → after).
+    const vs = document.getElementById('validation-section');
+    vs.innerHTML = '';
+    if (data.validation_before || data.validation_after) {
+      const before = data.validation_before;
+      const after = data.validation_after;
+      let html = '<div class="val-grid">';
+
+      // Before card.
+      if (before) {
+        html += `<div class="validation warn">
+          <h3>Before (original PDF)</h3>
+          <div class="stat warn">${before.failed_checks} failures</div>
+          <div class="detail">${before.failed_rules} rules failed / ${before.passed_rules + before.failed_rules} checked</div>
+        </div>`;
+      }
+      // After card.
+      if (after) {
+        const cls = after.failed_checks === 0 ? 'good' : 'warn';
+        const bg = after.failed_checks === 0 ? 'validation' : 'validation warn';
+        html += `<div class="${bg}">
+          <h3>After (tagged PDF)</h3>
+          <div class="stat ${cls}">${after.failed_checks} failures</div>
+          <div class="detail">${after.failed_rules} rules failed / ${after.passed_rules + after.failed_rules} checked</div>
+        </div>`;
+      }
+      html += '</div>';
+
+      // Rules fixed.
+      if (before && after) {
+        const beforeClauses = new Set((before.details || []).map(d => d.clause));
+        const afterClauses = new Set((after.details || []).map(d => d.clause));
+        const fixed = [...beforeClauses].filter(c => !afterClauses.has(c));
+        const remaining = (after.details || []);
+
+        if (fixed.length > 0 || remaining.length > 0) {
+          html += '<div style="margin-top:.75rem">';
+          if (fixed.length > 0) {
+            html += '<ul class="rule-list">';
+            const beforeMap = Object.fromEntries((before.details || []).map(d => [d.clause, d]));
+            for (const c of fixed) {
+              const desc = beforeMap[c]?.description || c;
+              html += `<li class="rule-fixed">✅ Fixed [${c}]: ${desc.slice(0, 80)}</li>`;
+            }
+            html += '</ul>';
+          }
+          if (remaining.length > 0) {
+            html += '<ul class="rule-list">';
+            for (const r of remaining) {
+              html += `<li class="rule-remaining">⚠ [${r.clause}] ×${r.count}: ${r.description.slice(0, 70)}</li>`;
+            }
+            html += '</ul>';
+          }
+          html += '</div>';
+        }
+      }
+      vs.innerHTML = html;
+    } else {
+      vs.innerHTML = '<p class="detail">verapdf not available — install from <a href="https://verapdf.org/software/">verapdf.org</a> for PDF/UA validation.</p>';
+    }
 
     // Metadata table.
     const mb = document.getElementById('meta-body');

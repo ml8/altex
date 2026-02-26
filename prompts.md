@@ -67,3 +67,43 @@ Perfect. Please add the plan to the docs/ directory with a name that corresponds
 ## Prompt 17
 
 Please create a Makefile to install dependencies, run common commands, build the docker container, and build the project for running local. Also include a clean target that cleans up demo output. Also make sure that you append our prompts to the prompts.md file. Update any necessary documents as well.
+
+## Prompt 18
+
+This project is a pipeline tool to make accessible PDFs given their source latex material. I would like for you to audit this code against other tools, including verapdf, which I have just installed on this system. Please build benchmarks that test our tool against verapdf. Documentation for the project is available here (https://verapdf.org/software/) and their github repository is https://verapdf.org/software/. Please determine if there are any elements of the verapdf pipeline that we should be leveraging in this project, but I would also like for you to verify the reputation of verapdf via an internet search and search of the accessibility literature. Our benchmarks should run our pdfs through verapdf and validate use the output to improve our system. There are alternative tools that I would also like for you to explore, like pave pdf (https://pave-pdf.org/), which looks like it uses ML to provide heuristic matching. But, please do not hyper-optimize or develop abstract techniques using AI/ML--I think for most use cases we can use the source document as a direct reference for how the PDF document should be annotated. We should use as much information about the structured and machine readable source document as possible in order to reduce inexact and heuristic matches. Let's start with building the benchmarks and your textual analysis of the project. Don't do any major refactors yet, if we are able to successfully have benchmarks, those should feed into our work.
+
+## Prompt 19
+
+Excellent. Now, can you plan the fixes that you have enumerated above? I would like for you to provide detailed plans for the resolution of each rule violation and the reason for the failure. Please take as much time as necessary to do this and document your plan for my review. Don't begin your work until I have had a chance to review the plan.
+
+## Prompt 20
+
+Great, I left Feedback in two places. Please review, answer my questions, and allow me to verify your responses before proceeding.
+
+## Prompt 21
+
+Let's update the plan and proceed with the work!
+
+## Prompt 22
+
+Excellent! Do you have a plan for the external corpus findings? If not, let's start there. Then, let's make this our standard benchmark. Select a few representative theory assignments or exams as well. Then let's make that external benchmark our iteration loop. Also, let's expand our external benchmark. Can you collect more documents from a variety of EDU sites? I would like to ensure that we cover various branches of computer science as well. let's make sure to include some systems research and homeworks, machine learning/ai, graphics and vr, data mining, theory, discrete math, etc. Try to add more beamer examples as well -- many faculty use beamer slides for CS work. You can use github as well to look for course websites and materials.
+
+## Prompt 23
+
+Yes let's do it! (re: planning and implementing link annotation fix)
+
+## Prompt 24
+
+Let's run --fix-encoding by default then, since that fixes most violations. Are there downsides to this?
+
+## Prompt 25
+
+I'd like to now consolidate our benchmarking and demos to be based around the external benchmarks. Let's also update the Makefile and the UI. Let's also look at how we can make the UI informative about the changes that were made. Please audit the scripts for proper collection of changes into reports to be displayed by the terminal and IO. Let's add verapdf validation as a step to validate the before/after output in the web UI. We don't need this for CLI since the user can run this manually. But adding a script that runs verapdf before, our tool, then after would be a userful contribution or enhancement to the app.
+
+## Prompt 26
+
+For our service version, will we have races on file-based manipulations, or are you properly using isolated temporary directories? Do we have any server state that would be raced over for concurrent requests? Let's also take some screenshots of the web UI and the before/after validation in order to update the readme. Or at least some sample CLI output that includes the verapdf results. Finally, let's take a pass over the project and look for opportunities to reevaluate our abstractions for their appropriateness as the code has evolved, and look for opportunities for simplification. If there are none, that's okay. Give me a plan before any major refactors.
+
+## Prompt 27
+
+Perfect. Let's do your minor simplifications. Let's move the bencharks out of benchmarks/external and just into benchmarks/ -- eliminating the concept of an external benchmark and just having one collection of benchmarks. Demos should just be runs on the benchmarks. Make sense? Finally, update the prompts.md file with our prompts from this session.

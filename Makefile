@@ -67,6 +67,14 @@ demo-alt: install install-node ## Embedded alternative HTML demo
 demo-math: install ## Math formula alt-text showcase
 	./demos/demo_math_alttext.sh
 
+# ── Benchmarks ─────────────────────────────────────────────────────────
+
+benchmark: install ## Run PDF/UA-1 benchmarks on existing tagged PDFs
+	./scripts/benchmark.sh
+
+benchmark-full: install ## Regenerate all tagged PDFs and benchmark
+	./scripts/benchmark.sh --tag-first
+
 # ── Clean ──────────────────────────────────────────────────────────────
 
 clean: ## Remove demo output and temp files

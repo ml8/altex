@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# demo_tag_all.sh — Tag every available PDF and summarize results.
+# demo_tag_all.sh — Tag every available benchmark PDF and summarize results.
 #
 # Usage: ./demos/demo_tag_all.sh
 #
-# Processes all .tex/.pdf pairs under theory/ and writes tagged PDFs to
+# Processes all .tex/.pdf pairs under benchmarks/ and writes tagged PDFs to
 # demos/output/.  Produces two variants per document:
-#   *_tagged.pdf           — structure tags + metadata
+#   *_tagged.pdf           — structure tags + metadata (no Ghostscript)
 #   *_tagged_encoded.pdf   — same, with Ghostscript font encoding fix
 #
 # Prints a summary table showing the structure elements found.
@@ -20,19 +20,20 @@ rm -rf "$OUT"
 mkdir -p "$OUT"
 
 echo "═══════════════════════════════════════════════════════════════"
-echo "  altex — tagging all available PDFs"
+echo "  altex — tagging benchmark PDFs"
 echo "═══════════════════════════════════════════════════════════════"
 echo
 
+# Representative subset for quick demo runs.
 pairs=(
-    "theory/364syllabus_fall12.tex  theory/364syllabus_fall12.pdf"
-    "theory/exam/exam1.tex         theory/exam/exam1.pdf"
-    "theory/exam/exam2.tex         theory/exam/exam2.pdf"
-    "theory/exam/exam3.tex         theory/exam/exam3.pdf"
-    "theory/hw/01induction.tex     theory/hw/01induction.pdf"
-    "theory/hw/02pumping-sol.tex   theory/hw/02pumping-sol.pdf"
-    "theory/lecture/01problems.tex theory/lecture/01problems.pdf"
-    "theory/lecture/04closure.tex  theory/lecture/04closure.pdf"
+    "benchmarks/syllabus/utoledo-math2850.tex benchmarks/syllabus/utoledo-math2850.pdf"
+    "benchmarks/exam/duke-exam.tex            benchmarks/exam/duke-exam.pdf"
+    "benchmarks/homework/bu-cs237-hw.tex      benchmarks/homework/bu-cs237-hw.pdf"
+    "benchmarks/homework/ucsd-math184a-hw.tex benchmarks/homework/ucsd-math184a-hw.pdf"
+    "benchmarks/beamer/tufts-beamer.tex       benchmarks/beamer/tufts-beamer.pdf"
+    "benchmarks/beamer/metropolis-demo.tex    benchmarks/beamer/metropolis-demo.pdf"
+    "benchmarks/paper/elegantpaper-en.tex     benchmarks/paper/elegantpaper-en.pdf"
+    "benchmarks/cv/duke-cv.tex               benchmarks/cv/duke-cv.pdf"
 )
 
 for pair in "${pairs[@]}"; do
@@ -43,12 +44,12 @@ for pair in "${pairs[@]}"; do
         continue
     fi
 
-    # Standard tagged version.
-    python -m altex "$tex" "$pdf" -o "$OUT/${name}_tagged.pdf" 2>&1
+    # Tagged without Ghostscript encoding fix.
+    python -m altex "$tex" "$pdf" --no-fix-encoding -o "$OUT/${name}_tagged.pdf" 2>&1
 
-    # Variant with Ghostscript font encoding fix.
+    # Tagged with Ghostscript encoding fix (default behavior).
     if command -v gs &>/dev/null; then
-        python -m altex "$tex" "$pdf" --fix-encoding -o "$OUT/${name}_tagged_encoded.pdf" 2>&1
+        python -m altex "$tex" "$pdf" -o "$OUT/${name}_tagged_encoded.pdf" 2>&1
     fi
 done
 

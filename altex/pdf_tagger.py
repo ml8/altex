@@ -9,17 +9,39 @@ embeds a PDF structure tree into the compiled PDF.  This makes the
 document navigable by screen readers and provides alt-text for formulas,
 code blocks, and figures.
 
-Content-stream tagging: each BT/ET text block in the PDF is wrapped in
-BDC/EMC marked-content operators with MCIDs.  Structure elements
-reference these MCIDs via /K entries.  Unmatched text blocks are tagged
-as Artifacts.
+PDF/UA-1 compliance (ISO 14289-1)
+----------------------------------
+The tagger addresses these PDF/UA requirements:
+
+- §5:1   — PDF/UA identification via ``pdfuaid:part`` in XMP metadata
+- §6.2:1 — ``/MarkInfo`` dictionary with ``/Marked = true``
+- §7.1:3 — All content marked as Artifact or tagged with MCIDs
+- §7.1:8 — XMP metadata stream with ``dc:title``
+- §7.1:10 — ``/DisplayDocTitle`` in viewer preferences
+- §7.1:11 — Structure tree rooted in ``/StructTreeRoot``
+- §7.2:20 — ``/LI`` elements contain only ``/Lbl`` and ``/LBody``
+- §7.2:34 — ``/Lang`` attribute on document catalog
+- §7.21.7 — Unicode mapping via ``/ActualText`` on marked content
+
+Content-stream tagging wraps each text operator (Tj/TJ) inside a BT/ET
+block in its own BDC/EMC marked-content sequence with a unique MCID.
+Non-text content (graphics, paths) is wrapped as ``/Artifact``.
+Structure elements reference MCIDs via ``/K`` entries, and the parent
+tree maps each MCID back to its owning StructElem.
+
+References
+----------
+- ISO 32000-1:2008 §14.6 — Marked content
+- ISO 32000-1:2008 §14.7 — Logical structure
+- ISO 32000-1:2008 §14.8 — Tagged PDF
+- ISO 14289-1:2014      — PDF/UA-1
+- verapdf rules: https://docs.verapdf.org/validation/pdfa-part1/
 """
 
 from __future__ import annotations
 
 from pathlib import Path
 
-import fitz
 import pikepdf
 
 from altex.models import DocumentNode, Tag
@@ -38,6 +60,7 @@ _PDF_TAG: dict[Tag, str] = {
     Tag.FORMULA: "Formula",
     Tag.CODE: "Code",
     Tag.FIGURE: "Figure",
+    Tag.LINK: "Link",
 }
 
 # Tags whose text should be exposed as /Alt (alternative description)
@@ -76,6 +99,9 @@ def tag(
     doc_title = title or pdf_path.stem
     with pdf.open_metadata(set_pikepdf_as_editor=False) as meta:
         meta["dc:title"] = doc_title
+        # PDF/UA-1 identification (ISO 14289-1 §5, verapdf rule §5:1).
+        # Declares that this PDF intends to conform to PDF/UA-1.
+        meta["pdfuaid:part"] = "1"
 
     # -- Tab order on every page --------------------------------------------
     for page in pdf.pages:
@@ -83,6 +109,13 @@ def tag(
 
     # -- Content-stream tagging ---------------------------------------------
     page_mcid_maps = _tag_content_streams(pdf, pdf_path)
+
+    # -- Set /StructParents on each page ------------------------------------
+    # Each page with marked content must declare its key into the parent
+    # tree's number tree (ISO 32000-1:2008 §14.7.4.4).  We use the page
+    # index as the key.
+    for page_idx, page in enumerate(pdf.pages):
+        page.obj["/StructParents"] = page_idx
 
     # -- Structure tree -----------------------------------------------------
     struct_root = pikepdf.Dictionary({
@@ -93,11 +126,23 @@ def tag(
     struct_root["/K"] = doc_elem
 
     # Link leaf structure elements to MCIDs.
-    _link_structure_to_content(pdf, leaf_elems, page_mcid_maps)
+    ownership = _link_structure_to_content(pdf, leaf_elems, page_mcid_maps)
 
-    # Build parent tree.
-    parent_tree = _build_parent_tree(pdf, page_mcid_maps, struct_root)
+    # Link PDF annotations to /Link StructElems (PDF/UA §7.18.5).
+    annot_parent_entries = _link_annotations_to_structure(
+        pdf, leaf_elems, struct_root,
+    )
+
+    # Build parent tree (reverse mapping: MCID → owning StructElem).
+    # The parent tree also includes annotation parent entries.
+    parent_tree = _build_parent_tree(
+        pdf, page_mcid_maps, struct_root, ownership, annot_parent_entries,
+    )
     struct_root["/ParentTree"] = pdf.make_indirect(parent_tree)
+    # /ParentTreeNextKey: pages use keys 0..N-1, annotations start at N.
+    struct_root["/ParentTreeNextKey"] = (
+        len(pdf.pages) + len(annot_parent_entries)
+    )
 
     pdf.Root["/StructTreeRoot"] = pdf.make_indirect(struct_root)
 
@@ -112,95 +157,140 @@ def tag(
 def _tag_content_streams(
     pdf: pikepdf.Pdf,
     pdf_path: Path,
-) -> list[list[tuple[int, str, str]]]:
-    """Wrap each BT/ET text block with BDC/EMC and return per-page MCID maps.
+) -> list[list[tuple[int, str]]]:
+    """Wrap each text operator in its own BDC/EMC and non-text as Artifact.
 
-    Returns a list (one per page) of lists of (mcid, tag_name, extracted_text)
-    tuples describing each marked-content region on that page.
+    PDF/UA-1 §7.1:3 requires every content item to be either tagged
+    (linked to a structure element via MCID) or marked as Artifact.
+
+    This function places BDC/EMC *inside* BT/ET blocks, wrapping each
+    individual text-drawing operator (Tj, TJ, ', ") with a unique MCID.
+    Content outside BT/ET blocks (graphics, paths, transforms) is wrapped
+    as ``/Artifact`` (ISO 32000-1:2008 §14.8.2.2).
+
+    Text is extracted directly from the TJ/Tj operands, avoiding the
+    need for a separate pymupdf text-extraction pass.
+
+    Returns a list (one per page) of ``(mcid, extracted_text)`` tuples.
     """
-    # Use pymupdf for text extraction (maps text to positions).
-    mu_doc = fitz.open(pdf_path)
-    all_page_maps: list[list[tuple[int, str, str]]] = []
+    all_page_maps: list[list[tuple[int, str]]] = []
 
     for page_idx, page in enumerate(pdf.pages):
         page.contents_coalesce()
         instructions = pikepdf.parse_content_stream(page)
 
-        # Extract text for each BT/ET block using pymupdf.
-        mu_page = mu_doc[page_idx] if page_idx < len(mu_doc) else None
-        page_text_blocks = _extract_page_text_blocks(mu_page) if mu_page else []
-
-        new_instructions = []
-        mcid_map: list[tuple[int, str, str]] = []
+        new_instructions: list[pikepdf.ContentStreamInstruction] = []
+        mcid_map: list[tuple[int, str]] = []
         mcid = 0
-        bt_depth = 0
-        block_idx = 0
-        in_marked = False
+        in_bt = False
+        # Accumulate non-BT instructions for artifact wrapping.
+        pending_non_bt: list[pikepdf.ContentStreamInstruction] = []
 
         for inst in instructions:
             op = str(inst.operator)
 
             if op == "BT":
-                # Start a marked-content sequence before BT.
-                tag_name = "P"  # default; will be refined by structure linking
-                text = page_text_blocks[block_idx] if block_idx < len(page_text_blocks) else ""
-                mcid_map.append((mcid, tag_name, text))
-
-                bdc = pikepdf.ContentStreamInstruction(
-                    [pikepdf.Name("/P"), pikepdf.Dictionary({"/MCID": mcid})],
-                    pikepdf.Operator("BDC"),
-                )
-                new_instructions.append(bdc)
-                in_marked = True
-                mcid += 1
-                block_idx += 1
-                bt_depth += 1
+                # Flush pending non-BT content as Artifact.
+                _flush_artifact(new_instructions, pending_non_bt)
+                pending_non_bt = []
                 new_instructions.append(inst)
+                in_bt = True
 
             elif op == "ET":
                 new_instructions.append(inst)
-                bt_depth -= 1
-                if bt_depth <= 0 and in_marked:
-                    new_instructions.append(
-                        pikepdf.ContentStreamInstruction([], pikepdf.Operator("EMC"))
-                    )
-                    in_marked = False
-                    bt_depth = 0
+                in_bt = False
 
-            else:
+            elif in_bt and op in _TEXT_OPS:
+                # Wrap this text operator in its own BDC/EMC with a
+                # unique MCID (ISO 32000-1 §14.6, "marked-content
+                # sequence").  Using /Span as the structure type for
+                # individual text runs; the actual semantic type comes
+                # from the StructElem that links to this MCID.
+                #
+                # /ActualText provides a Unicode fallback for fonts
+                # without ToUnicode CMaps (ISO 14289-1 §7.21.7,
+                # verapdf rule §7.21.7:1).
+                text = _extract_tj_text(inst)
+                mcid_map.append((mcid, text))
+
+                props = pikepdf.Dictionary({"/MCID": mcid})
+                if text:
+                    props["/ActualText"] = pikepdf.String(text)
+
+                bdc = pikepdf.ContentStreamInstruction(
+                    [pikepdf.Name("/Span"), props],
+                    pikepdf.Operator("BDC"),
+                )
+                emc = pikepdf.ContentStreamInstruction(
+                    [], pikepdf.Operator("EMC"),
+                )
+                new_instructions.append(bdc)
+                new_instructions.append(inst)
+                new_instructions.append(emc)
+                mcid += 1
+
+            elif in_bt:
+                # Non-text instructions inside BT/ET (Tf, Td, Tm, etc.)
+                # stay as-is — they set graphics state, not content.
                 new_instructions.append(inst)
 
-        # Close any unclosed marked content.
-        if in_marked:
-            new_instructions.append(
-                pikepdf.ContentStreamInstruction([], pikepdf.Operator("EMC"))
-            )
+            else:
+                # Outside BT/ET — accumulate for artifact wrapping.
+                pending_non_bt.append(inst)
+
+        # Flush any remaining non-BT content at end of stream.
+        _flush_artifact(new_instructions, pending_non_bt)
 
         # Rewrite the content stream.
         new_data = pikepdf.unparse_content_stream(new_instructions)
         page.Contents = pdf.make_stream(new_data)
-
         all_page_maps.append(mcid_map)
 
-    mu_doc.close()
     return all_page_maps
 
 
-def _extract_page_text_blocks(mu_page: fitz.Page) -> list[str]:
-    """Extract text from each block on a pymupdf page, in content order."""
-    blocks = mu_page.get_text("dict", sort=True)["blocks"]
-    texts = []
-    for block in blocks:
-        if "lines" not in block:
-            continue
-        block_text = " ".join(
-            span["text"]
-            for line in block["lines"]
-            for span in line["spans"]
-        )
-        if block_text.strip():
-            texts.append(block_text.strip())
-    return texts
+def _flush_artifact(
+    out: list[pikepdf.ContentStreamInstruction],
+    pending: list[pikepdf.ContentStreamInstruction],
+) -> None:
+    """Wrap accumulated non-text instructions in an Artifact BDC/EMC.
+
+    PDF/UA-1 §7.1:3 — decorative content (rules, backgrounds, page
+    furniture) must be marked as Artifact so assistive technology can
+    skip it.  See ISO 32000-1:2008 §14.8.2.2.
+    """
+    if not pending:
+        return
+    bdc = pikepdf.ContentStreamInstruction(
+        [pikepdf.Name("/Artifact"), pikepdf.Dictionary()],
+        pikepdf.Operator("BDC"),
+    )
+    emc = pikepdf.ContentStreamInstruction(
+        [], pikepdf.Operator("EMC"),
+    )
+    out.append(bdc)
+    out.extend(pending)
+    out.append(emc)
+
+
+def _extract_tj_text(inst: pikepdf.ContentStreamInstruction) -> str:
+    """Extract readable text from a Tj/TJ content-stream instruction.
+
+    TJ arrays contain alternating strings and numeric kerning values.
+    We concatenate the string parts.  The result is in font encoding
+    (often Latin-1 for standard LaTeX fonts), not guaranteed Unicode,
+    but sufficient for fuzzy text matching against the LaTeX source.
+    """
+    operand = inst.operands[0]
+    if isinstance(operand, pikepdf.Array):
+        parts: list[str] = []
+        for item in operand:
+            if isinstance(item, (pikepdf.String, bytes)):
+                parts.append(bytes(item).decode("latin-1", errors="replace"))
+        return "".join(parts)
+    if isinstance(operand, pikepdf.String):
+        return bytes(operand).decode("latin-1", errors="replace")
+    return ""
 
 
 # ---------------------------------------------------------------------------
@@ -214,7 +304,14 @@ def _build_element(
     parent: pikepdf.Dictionary,
     leaf_elems: list[tuple[pikepdf.Dictionary, DocumentNode]],
 ) -> pikepdf.Dictionary:
-    """Create a PDF StructElem for *node* and recurse into children."""
+    """Create a PDF StructElem for *node* and recurse into children.
+
+    For LIST_ITEM nodes, children are wrapped in an ``/LBody`` container
+    to satisfy PDF/UA-1 §7.2 (verapdf rule §7.2:20), which requires
+    ``/LI`` elements to contain only ``/Lbl`` and ``/LBody`` children.
+
+    See ISO 32000-1:2008 §14.8.4.3.3 (list elements).
+    """
     tag_name = _PDF_TAG.get(node.tag, "Span")
     elem = pikepdf.Dictionary({
         "/Type": pikepdf.Name("/StructElem"),
@@ -231,11 +328,26 @@ def _build_element(
 
     # Recurse into children.
     if node.children:
-        kids = pikepdf.Array()
-        for child in node.children:
-            child_elem = _build_element(pdf, child, elem, leaf_elems)
-            kids.append(pdf.make_indirect(child_elem))
-        elem["/K"] = kids
+        if node.tag == Tag.LIST_ITEM:
+            # PDF/UA §7.2:20 — LI must contain only Lbl and LBody.
+            # Wrap all children in an /LBody container element.
+            lbody = pikepdf.Dictionary({
+                "/Type": pikepdf.Name("/StructElem"),
+                "/S": pikepdf.Name("/LBody"),
+                "/P": elem,
+            })
+            lbody_kids = pikepdf.Array()
+            for child in node.children:
+                child_elem = _build_element(pdf, child, lbody, leaf_elems)
+                lbody_kids.append(pdf.make_indirect(child_elem))
+            lbody["/K"] = lbody_kids
+            elem["/K"] = pikepdf.Array([pdf.make_indirect(lbody)])
+        else:
+            kids = pikepdf.Array()
+            for child in node.children:
+                child_elem = _build_element(pdf, child, elem, leaf_elems)
+                kids.append(pdf.make_indirect(child_elem))
+            elem["/K"] = kids
     else:
         # Leaf node — track for MCID linking.
         leaf_elems.append((elem, node))
@@ -256,17 +368,37 @@ def _normalize(text: str) -> str:
 def _link_structure_to_content(
     pdf: pikepdf.Pdf,
     leaf_elems: list[tuple[pikepdf.Dictionary, DocumentNode]],
-    page_mcid_maps: list[list[tuple[int, str, str]]],
-) -> None:
-    """Link leaf structure elements to MCIDs via best-effort text matching."""
+    page_mcid_maps: list[list[tuple[int, str]]],
+) -> dict[tuple[int, int], pikepdf.Dictionary]:
+    """Link leaf structure elements to MCIDs via text matching.
+
+    With per-TJ MCIDs, each MCID contains a short text fragment.  A
+    single StructElem (e.g., a paragraph) typically spans multiple TJ
+    operators, so one StructElem may link to many MCIDs.  The ``/K``
+    entry on the StructElem becomes an Array of MCR (marked-content
+    reference) dictionaries.
+
+    Returns a mapping from ``(page_idx, mcid)`` to the StructElem that
+    owns it — this is used by ``_build_parent_tree`` to create correct
+    reverse mappings (ISO 32000-1:2008 §14.7.4.4).
+    """
     # Build a flat list of all MCIDs with page references.
     all_mcids: list[tuple[int, int, str]] = []  # (page_idx, mcid, text)
     for page_idx, mcid_map in enumerate(page_mcid_maps):
-        for mcid, _, text in mcid_map:
+        for mcid, text in mcid_map:
             all_mcids.append((page_idx, mcid, text))
 
-    # For each leaf element, find the best matching MCID.
+    if not all_mcids:
+        return {}
+
+    # Ownership map: (page_idx, mcid) → StructElem that claims it.
+    ownership: dict[tuple[int, int], pikepdf.Dictionary] = {}
+
+    # For each leaf element, find all MCIDs whose text is a substring
+    # of the node's text (or vice versa).  This allows one StructElem
+    # to claim multiple TJ fragments.
     used_mcids: set[tuple[int, int]] = set()
+
     for elem, node in leaf_elems:
         if not node.text:
             continue
@@ -274,8 +406,7 @@ def _link_structure_to_content(
         if not node_norm:
             continue
 
-        best_score = 0.0
-        best_match: tuple[int, int] | None = None
+        matched_mcrs: list[pikepdf.Dictionary] = []
 
         for page_idx, mcid, mcid_text in all_mcids:
             if (page_idx, mcid) in used_mcids:
@@ -284,26 +415,34 @@ def _link_structure_to_content(
             if not mcid_norm:
                 continue
 
-            # Simple substring matching score.
             score = _match_score(node_norm, mcid_norm)
-            if score > best_score:
-                best_score = score
-                best_match = (page_idx, mcid)
+            if score > 0.3:
+                page_ref = pdf.pages[page_idx].obj
+                mcr = pikepdf.Dictionary({
+                    "/Type": pikepdf.Name("/MCR"),
+                    "/Pg": page_ref,
+                    "/MCID": mcid,
+                })
+                matched_mcrs.append(mcr)
+                used_mcids.add((page_idx, mcid))
+                ownership[(page_idx, mcid)] = elem
 
-        if best_match and best_score > 0.3:
-            page_idx, mcid = best_match
-            used_mcids.add(best_match)
-            page_ref = pdf.pages[page_idx].obj
-            mcr = pikepdf.Dictionary({
-                "/Type": pikepdf.Name("/MCR"),
-                "/Pg": page_ref,
-                "/MCID": mcid,
-            })
-            elem["/K"] = mcr
+        if matched_mcrs:
+            if len(matched_mcrs) == 1:
+                elem["/K"] = matched_mcrs[0]
+            else:
+                elem["/K"] = pikepdf.Array(matched_mcrs)
+
+    return ownership
 
 
 def _match_score(needle: str, haystack: str) -> float:
-    """Return a 0–1 score for how well *needle* matches *haystack*."""
+    """Return a 0–1 score for how well *needle* matches *haystack*.
+
+    Used for fuzzy matching between LaTeX source text (from the
+    DocumentNode) and PDF content-stream text (from TJ operands).
+    Supports exact match, substring containment, and word overlap.
+    """
     if needle == haystack:
         return 1.0
     if needle in haystack or haystack in needle:
@@ -320,26 +459,165 @@ def _match_score(needle: str, haystack: str) -> float:
 
 
 # ---------------------------------------------------------------------------
+# Annotation → structure linking (PDF/UA §7.18)
+# ---------------------------------------------------------------------------
+
+
+def _link_annotations_to_structure(
+    pdf: pikepdf.Pdf,
+    leaf_elems: list[tuple[pikepdf.Dictionary, DocumentNode]],
+    struct_root: pikepdf.Dictionary,
+) -> list[tuple[int, pikepdf.Dictionary]]:
+    """Link PDF link annotations to ``/Link`` StructElems.
+
+    PDF/UA-1 §7.18.5 (verapdf rules §7.18.5:1, §7.18.5:2) requires
+    that link annotations be tagged as ``/Link`` structure elements.
+    §7.18.1:2 requires annotations to have ``/Contents`` or ``/Alt``.
+
+    For each link annotation found in the PDF, this function:
+
+    1. Sets ``/Contents`` on the annotation (alt description).
+    2. Assigns ``/StructParent`` to the annotation (key into parent tree).
+    3. Creates an OBJR (object reference) in the matching ``/Link``
+       StructElem's ``/K`` entry (ISO 32000-1:2008 §14.7.4.3).
+
+    Returns a list of ``(parent_tree_key, struct_elem)`` pairs for
+    annotation entries in the parent tree.
+    """
+    # Collect /Link StructElems from leaf_elems.
+    link_elems: list[tuple[pikepdf.Dictionary, DocumentNode]] = [
+        (elem, node) for elem, node in leaf_elems
+        if node.tag == Tag.LINK
+    ]
+
+    annot_parent_entries: list[tuple[int, pikepdf.Dictionary]] = []
+    # Annotation parent tree keys start after page keys.
+    next_key = len(pdf.pages)
+    link_idx = 0
+
+    for page_idx, page in enumerate(pdf.pages):
+        annots = page.obj.get("/Annots")
+        if not annots:
+            continue
+
+        for annot_ref in annots:
+            annot = annot_ref
+            if not isinstance(annot, pikepdf.Dictionary):
+                continue
+
+            # Only process /Link annotations.
+            if str(annot.get("/Subtype", "")) != "/Link":
+                continue
+
+            # Extract URL for alt description.
+            action = annot.get("/A")
+            uri = ""
+            if isinstance(action, pikepdf.Dictionary):
+                uri_obj = action.get("/URI")
+                if uri_obj is not None:
+                    uri = str(uri_obj)
+
+            dest = annot.get("/Dest")
+            alt_text = uri or (str(dest) if dest else "Link")
+
+            # §7.18.1:2 — Set /Contents on annotation.
+            if "/Contents" not in annot:
+                annot["/Contents"] = pikepdf.String(alt_text)
+
+            # §7.18.5:1 — Assign /StructParent for parent tree.
+            annot["/StructParent"] = next_key
+
+            # Find a matching /Link StructElem.
+            matched_elem = None
+            if link_idx < len(link_elems):
+                matched_elem = link_elems[link_idx][0]
+                link_idx += 1
+            else:
+                # No parser-produced /Link node; create one.
+                matched_elem = pikepdf.Dictionary({
+                    "/Type": pikepdf.Name("/StructElem"),
+                    "/S": pikepdf.Name("/Link"),
+                    "/P": struct_root,
+                    "/Alt": pikepdf.String(alt_text),
+                })
+                # Append to the document element's children.
+                doc_elem = struct_root["/K"]
+                if "/K" in doc_elem:
+                    k = doc_elem["/K"]
+                    if isinstance(k, pikepdf.Array):
+                        k.append(pdf.make_indirect(matched_elem))
+                    else:
+                        doc_elem["/K"] = pikepdf.Array(
+                            [k, pdf.make_indirect(matched_elem)]
+                        )
+                else:
+                    doc_elem["/K"] = pdf.make_indirect(matched_elem)
+
+            # Create OBJR (object reference) linking StructElem → annotation.
+            objr = pikepdf.Dictionary({
+                "/Type": pikepdf.Name("/OBJR"),
+                "/Pg": page.obj,
+                "/Obj": annot_ref,
+            })
+
+            # Add OBJR to the StructElem's /K.
+            existing_k = matched_elem.get("/K")
+            if existing_k is None:
+                matched_elem["/K"] = objr
+            elif isinstance(existing_k, pikepdf.Array):
+                existing_k.append(objr)
+            else:
+                matched_elem["/K"] = pikepdf.Array([existing_k, objr])
+
+            annot_parent_entries.append((next_key, matched_elem))
+            next_key += 1
+
+    return annot_parent_entries
+
+
+# ---------------------------------------------------------------------------
 # Parent tree (maps MCIDs → structure elements)
 # ---------------------------------------------------------------------------
 
 
 def _build_parent_tree(
     pdf: pikepdf.Pdf,
-    page_mcid_maps: list[list[tuple[int, str, str]]],
+    page_mcid_maps: list[list[tuple[int, str]]],
     struct_root: pikepdf.Dictionary,
+    ownership: dict[tuple[int, int], pikepdf.Dictionary],
+    annot_parent_entries: list[tuple[int, pikepdf.Dictionary]] | None = None,
 ) -> pikepdf.Dictionary:
-    """Build a /ParentTree number tree.
+    """Build a ``/ParentTree`` number tree (ISO 32000-1:2008 §14.7.4.4).
 
-    Maps each MCID back to the StructTreeRoot as a simplified parent
-    reference.  A production tool would map each MCID to its specific
-    parent StructElem.
+    The parent tree maps each page's MCIDs back to their owning
+    StructElem.  verapdf rule §7.1:3 checks both directions: StructElem
+    → MCID (via ``/K``) and MCID → StructElem (via ``/ParentTree``).
+
+    Each entry in ``/Nums`` is: ``page_index, [elem_for_mcid_0,
+    elem_for_mcid_1, ...]``.  MCIDs not linked to any StructElem are
+    mapped to ``struct_root`` as a fallback.
+
+    Annotation parent entries (from ``_link_annotations_to_structure``)
+    are appended with keys starting after the page keys.
     """
     nums = pikepdf.Array()
-    for mcid_map in page_mcid_maps:
-        for mcid, _, _ in mcid_map:
-            nums.append(mcid)
-            nums.append(struct_root)
+
+    for page_idx, mcid_map in enumerate(page_mcid_maps):
+        if not mcid_map:
+            continue
+        # Build an array of parent refs, one per MCID on this page.
+        parents = pikepdf.Array()
+        for mcid, _ in mcid_map:
+            parent_elem = ownership.get((page_idx, mcid), struct_root)
+            parents.append(parent_elem)
+        nums.append(page_idx)
+        nums.append(pdf.make_indirect(parents))
+
+    # Append annotation parent entries (§7.18.5).
+    if annot_parent_entries:
+        for key, elem in annot_parent_entries:
+            nums.append(key)
+            nums.append(elem)
 
     return pikepdf.Dictionary({
         "/Nums": nums,

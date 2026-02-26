@@ -4,7 +4,7 @@
 # Usage: ./demos/demo_compare.sh <tex_file> <pdf_file>
 #
 # Example:
-#   ./demos/demo_compare.sh theory/exam/exam1.tex theory/exam/exam1.pdf
+#   ./demos/demo_compare.sh benchmarks/homework/bu-cs237-hw.tex benchmarks/homework/bu-cs237-hw.pdf
 #
 # Shows:
 #   1. Whether the original PDF has structure tags (spoiler: it doesn't)

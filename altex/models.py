@@ -28,6 +28,7 @@ class Tag(Enum):
     FORMULA = "Formula"
     CODE = "Code"
     FIGURE = "Figure"
+    LINK = "Link"
 
 
 # Map LaTeX sectioning depth to heading tag.
@@ -78,3 +79,14 @@ class DocumentNode:
     @classmethod
     def from_json(cls, s: str) -> Self:
         return cls.from_dict(json.loads(s))
+
+    # -- Tree queries ------------------------------------------------------
+
+    def collect_by_tag(self, tag: Tag) -> list[DocumentNode]:
+        """Return all descendants (including self) with the given tag."""
+        result: list[DocumentNode] = []
+        if self.tag == tag and self.text:
+            result.append(self)
+        for child in self.children:
+            result.extend(child.collect_by_tag(tag))
+        return result

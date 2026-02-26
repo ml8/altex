@@ -11,7 +11,7 @@ cd "$(dirname "$0")/.."
 
 source .venv/bin/activate
 
-TEX="theory/exam/exam1.tex"
+TEX="benchmarks/homework/bu-cs237-hw.tex"
 
 echo "═══════════════════════════════════════════════════════════════"
 echo "  Math-to-Speech Demo"

@@ -12,8 +12,8 @@ cd "$(dirname "$0")/.."
 
 source .venv/bin/activate
 
-TEX="theory/exam/exam1.tex"
-PDF="theory/exam/exam1.pdf"
+TEX="benchmarks/homework/bu-cs237-hw.tex"
+PDF="benchmarks/homework/bu-cs237-hw.pdf"
 OUT="/tmp/exam1_tagged.pdf"
 
 echo "═══════════════════════════════════════════════════════════════"

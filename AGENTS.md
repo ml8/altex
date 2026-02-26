@@ -33,12 +33,16 @@ altex/                     # Core pipeline (no web dependencies)
 ├── models.py              # Tag enum + DocumentNode dataclass
 ├── latex_parser.py        # parse(tex_path) → DocumentNode
 │                          #   Uses pylatexenc LatexWalker with custom context
-│                          #   (_latex_context adds \paragraph spec)
+│                          #   (_latex_context adds \paragraph, \href, \url specs)
 ├── pdf_tagger.py          # tag(pdf_path, tree, output_path, lang, title)
-│                          #   1. Sets metadata (Lang, title, tabs, MarkInfo)
-│                          #   2. Tags content streams (BDC/EMC with MCIDs)
-│                          #   3. Builds structure tree + parent tree
-│                          #   4. Links structure elements to MCIDs via text matching
+│                          #   1. Sets metadata (Lang, title, tabs, MarkInfo, pdfuaid)
+│                          #   2. Tags content streams (per-TJ BDC/EMC with MCIDs)
+│                          #   3. Marks non-text content as Artifact
+│                          #   4. Builds structure tree + parent tree
+│                          #   5. Links structure elements to MCIDs via text matching
+│                          #   6. Links PDF annotations to /Link StructElems
+├── verapdf.py             # validate(pdf_path) → dict | None
+│                          #   Shared verapdf wrapper for web UI and benchmarks
 ├── math_speech.py         # latex_to_speech(formulas, engine) → list[str]
 │                          #   Pluggable: "sre" (latex2mathml+SRE), "mathjax", "none"
 │                          #   Isolated: imports only stdlib + latex2mathml
@@ -51,7 +55,9 @@ altex/                     # Core pipeline (no web dependencies)
 ├── cli.py                 # CLI: python -m altex source.tex input.pdf -o out.pdf
 └── __main__.py            # Entry point for python -m altex
 
-scripts/                   # Node.js worker scripts for math-to-speech
+scripts/                   # Benchmarks and Node.js workers
+├── benchmark.sh           # Run PDF/UA-1 benchmarks via verapdf
+├── benchmark_report.py    # Benchmark runner + report generator
 ├── sre_worker.js          # Batch MathML→speech via SRE (stdin/stdout)
 ├── mathjax_worker.js      # Batch LaTeX→speech via mathjax-full+SRE
 └── run-local.sh           # Start Flask dev server locally
@@ -65,12 +71,21 @@ docs/                      # Project documentation
 ├── pdf-tagging-reference.md  # PDF structure tag types reference
 └── math-speech-and-alt-document.md  # Phase 4 design plan
 
-demos/                     # Demo scripts (run against theory/ test data)
+demos/                     # Demo scripts (run against benchmarks/)
 ├── demo_compare.sh        # Before/after comparison
 ├── demo_math_alttext.sh   # Math formula alt-text showcase
 ├── demo_math_speech.sh    # Math-to-speech engine comparison
 ├── demo_alt_document.sh   # Embedded alternative HTML demo
-└── demo_tag_all.sh        # Batch-tag all test docs (both variants)
+└── demo_tag_all.sh        # Batch-tag representative benchmark docs
+
+benchmarks/                # PDF/UA benchmark corpus (.tex + .pdf pairs)
+├── beamer/                # Beamer presentations (Tufts, Stanford, etc.)
+├── cv/                    # CV templates
+├── exam/                  # Exam templates
+├── homework/              # Homework (ML, combinatorics, HPC, etc.)
+├── paper/                 # Papers and lecture notes
+├── syllabus/              # Course syllabi
+└── manifest.json          # Metadata for all benchmark documents
 ```
 
 ## How to Build and Run
@@ -79,7 +94,7 @@ demos/                     # Demo scripts (run against theory/ test data)
 # CLI
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python -m altex theory/exam/exam1.tex theory/exam/exam1.pdf -o /tmp/out.pdf
+python -m altex benchmarks/homework/bu-cs237-hw.tex benchmarks/homework/bu-cs237-hw.pdf -o /tmp/out.pdf
 
 # Web (local)
 pip install flask
@@ -88,46 +103,50 @@ FLASK_APP=web.app flask run --port=5001
 # Docker
 docker compose up --build
 # → http://localhost:5000
+
+# Benchmarks
+./scripts/benchmark.sh --tag-first
 ```
 
 ## Test Data
 
-The `theory/` directory (gitignored) contains LaTeX source + compiled PDFs
-from a theory of computation course.  Key test cases:
+The `benchmarks/` directory contains .tex + .pdf pairs from .edu sites and
+academic repositories, covering diverse document types:
 
-| File | Tests |
-|------|-------|
-| `theory/364syllabus_fall12.tex` | Lists, tables, basic text |
-| `theory/exam/exam1.tex` | Heavy inline + display math, `gather*` |
-| `theory/hw/01induction.tex` | Nested lists, `align*`, `\includegraphics` |
-| `theory/hw/02pumping-sol.tex` | Math proofs, many formulas (138 Formula nodes) |
-| `theory/lecture/04closure.tex` | `\paragraph{}` headings, images, custom `question` env |
+| Category | Examples |
+|----------|----------|
+| Beamer slides | Tufts Math, Stanford, UC Davis, Metropolis theme |
+| Homework | BU probability, UPenn ML, UCSD combinatorics, SFSU HPC |
+| Papers | Cambridge distributed systems, W&M thesis, ElegantPaper |
+| Exams | Duke math exam template |
+| Syllabi | U. Toledo calculus |
+| CVs | Duke CV template |
 
-Run all tests: `./demos/demo_tag_all.sh`
+Run all benchmarks: `make benchmark-full`
 
 ## Known Issues and Technical Debt
-
-### Content-stream tagging is coarse
-MCIDs are assigned per BT/ET text block (one per block), not per text
-operator.  The matching between structure elements and MCIDs uses word-
-overlap heuristic scoring (`_match_score` in `pdf_tagger.py`).  Many
-structure elements may remain unlinked.
 
 ### Preamble noise
 The parser doesn't skip content before `\begin{document}`.  Preamble
 macros like `\pagestyle{empty}` get their args extracted as paragraph
-text.  Fix: detect `\begin{document}` in `_walk()` and only emit nodes
-after that point.
+text.  Empty headings from preamble noise are pruned by
+`_prune_empty_headings`, but other noise nodes may remain.
 
-### Parent tree is simplified
-`_build_parent_tree` maps all MCIDs back to `StructTreeRoot` rather than
-to their specific parent `StructElem`.  This is technically incorrect per
-the PDF spec.  Fix: track which StructElem each MCID was assigned to
-during `_link_structure_to_content`.
+### Content-stream MCID linking uses fuzzy text matching
+Each TJ/Tj operator gets its own MCID (per-operator granularity), but
+linking MCIDs to StructElems uses word-overlap heuristic scoring
+(`_match_score` in `pdf_tagger.py`).  Some structure elements may
+remain unlinked when font encoding prevents readable text extraction.
+
+### Font ToUnicode (§7.21.7:1)
+The only remaining verapdf failure category.  Math/symbol fonts
+(CMSY10, etc.) in some PDFs lack ToUnicode CMaps.  Ghostscript
+(`--fix-encoding`, on by default) resolves most; the rest require
+re-compilation with modern LaTeX engines (lualatex/xelatex).
 
 ### Port conflict on macOS
-Port 5000 is used by AirPlay Receiver on macOS.  The `run-local.sh`
-script uses 5000; you may need to change to 5001 or disable AirPlay.
+Port 5000 is used by AirPlay Receiver on macOS.  The Makefile and
+`run-local.sh` use port 5001.
 
 ## Adobe Accessibility Checker Results
 

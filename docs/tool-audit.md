@@ -180,16 +180,47 @@ and either renumber or warn.
 
 ### Overall progress metric
 
-| Metric | Original | Tagged+Encoded |
-|--------|----------|----------------|
-| Total failed checks | 3,774 | 2,037 |
-| Total rules checked | 9,042 | 21,488 |
-| Failure rate | 41.7% | 9.5% |
-| Rules passing | ~99-100/106 | ~101-104/106 |
+**Internal corpus (8 documents):**
 
-altex reduces the failure rate from **41.7% to 9.5%** and fixes 5 of 7
-originally-failing rule categories.  The remaining 9.5% is dominated by
-the artifact/tagging linkage issue (§7.1:3).
+| Metric | Original | Tagged | Tagged+Encoded |
+|--------|----------|--------|----------------|
+| Total failed checks | 3,774 | 27 | 16 |
+| Failure rate | 41.7% | 0.05% | 0.03% |
+
+**Full corpus (15 documents, including external .edu sources):**
+
+| Metric | Original | Tagged | Tagged+Encoded |
+|--------|----------|--------|----------------|
+| Total failed checks | 15,430 | 1,733 | 1,589 |
+| Failure rate | 54.3% | 0.7% | 0.7% |
+
+altex now fixes **12 of the original rule categories** across all test
+documents.  The internal corpus achieves near-perfect PDF/UA-1 compliance
+(0.03% failure rate with encoding fix).  The external corpus reveals
+additional failure categories specific to certain document types.
+
+### New failure categories from external corpus
+
+The external .edu benchmark corpus (7 documents) revealed failure
+categories not present in the internal corpus:
+
+1. **§7.18.x — Link annotations** (tufts-beamer: 978 failures)
+   Beamer slides with hyperlinks require link annotations to be tagged
+   as `/Link` elements with alt descriptions.  altex doesn't currently
+   handle PDF annotations.
+
+2. **§7.3:1 — Figure alt text** (wm-thesis: 2, bu-cs237-hw: 1)
+   Figures without `\caption{}` still need `/Alt` text on their
+   `/Figure` StructElem.  Our parser falls back to empty alt text.
+
+3. **§7.21.7:1 — Font ToUnicode** (duke-cv: 280, duke-exam: 154)
+   PostScript-based PDFs (dvips→ps2pdf) have far more ToUnicode
+   failures than pdflatex-generated PDFs.
+
+4. **§7.4.2:1 — Heading hierarchy** (bu-cs237-hw: 1)
+   The heading normalization fix resolved this for our internal corpus
+   but the external homework uses `\section*{}` (unnumbered) mixed
+   with custom heading macros that the parser doesn't detect.
 
 
 ## 4. Recommendations
