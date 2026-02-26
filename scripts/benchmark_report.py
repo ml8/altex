@@ -35,6 +35,21 @@ TEST_PAIRS = [
     ("theory/lecture/04closure.tex", "theory/lecture/04closure.pdf"),
 ]
 
+EXTERNAL_DIR = ROOT / "benchmarks" / "external"
+
+# External benchmark corpus: (tex_path, pdf_path) pairs relative to ROOT
+# These are publicly available .edu-sourced documents; only used when
+# benchmarks/external/ exists.
+EXTERNAL_PAIRS = [
+    ("benchmarks/external/paper/wm-thesis.tex", "benchmarks/external/paper/wm-thesis.pdf"),
+    ("benchmarks/external/beamer/tufts-beamer.tex", "benchmarks/external/beamer/tufts-beamer.pdf"),
+    ("benchmarks/external/cv/duke-cv.tex", "benchmarks/external/cv/duke-cv.pdf"),
+    ("benchmarks/external/syllabus/utoledo-math2850.tex", "benchmarks/external/syllabus/utoledo-math2850.pdf"),
+    ("benchmarks/external/exam/duke-exam.tex", "benchmarks/external/exam/duke-exam.pdf"),
+    ("benchmarks/external/homework/bu-cs237-hw.tex", "benchmarks/external/homework/bu-cs237-hw.pdf"),
+    ("benchmarks/external/homework/uw-amath586-hw.tex", "benchmarks/external/homework/uw-amath586-hw.pdf"),
+]
+
 OUTPUT_DIR = ROOT / "demos" / "output"
 
 
@@ -132,12 +147,23 @@ def run_altex(tex_path: Path, pdf_path: Path, output: Path, fix_encoding: bool =
 
 def run_benchmarks(tag_first: bool = False) -> list[DocumentBenchmark]:
     """Run full benchmark suite."""
+    results = _run_pairs(TEST_PAIRS, tag_first)
+
+    # Include external corpus when the directory exists
+    if EXTERNAL_DIR.is_dir():
+        results.extend(_run_pairs(EXTERNAL_PAIRS, tag_first))
+
+    return results
+
+
+def _run_pairs(pairs: list[tuple[str, str]], tag_first: bool) -> list[DocumentBenchmark]:
+    """Run benchmarks for a list of (tex, pdf) pairs."""
     results = []
 
     if tag_first:
         OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    for tex_rel, pdf_rel in TEST_PAIRS:
+    for tex_rel, pdf_rel in pairs:
         tex_path = ROOT / tex_rel
         pdf_path = ROOT / pdf_rel
         name = pdf_path.stem

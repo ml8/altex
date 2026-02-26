@@ -1,0 +1,86 @@
+[
+  {
+    "id": "wm-thesis",
+    "category": "paper",
+    "tex": "paper/wm-thesis.tex",
+    "pdf": "paper/wm-thesis.pdf",
+    "source_url_tex": "https://jxshix.people.wm.edu/p5/Tim-thesis.tex",
+    "source_url_pdf": "https://jxshix.people.wm.edu/p5/Tim-thesis.pdf",
+    "institution": "William & Mary",
+    "description": "Undergraduate honor thesis in mathematics",
+    "notable_features": ["book class", "amsmath", "theorems", "proofs", "figures", "bibliography", "chapters", "table of contents"],
+    "notes": "Part of W&M Physics/Math LaTeX tutorial collection. May reference external image files."
+  },
+  {
+    "id": "tufts-beamer",
+    "category": "beamer",
+    "tex": "beamer/tufts-beamer.tex",
+    "pdf": "beamer/tufts-beamer.pdf",
+    "source_url_tex": "https://gmcninch.math.tufts.edu/2024-Sp-Math190/course-assets/latex-examples/beamer-example.tex",
+    "source_url_pdf": "https://gmcninch.math.tufts.edu/2024-Sp-Math190/course-assets/latex-examples/beamer-example.pdf",
+    "institution": "Tufts University",
+    "description": "Beamer presentation example from Math 190 course",
+    "notable_features": ["beamer class", "frames", "math", "lists", "overlays", "columns"],
+    "notes": "Course asset from Spring 2024 Math 190."
+  },
+  {
+    "id": "duke-cv",
+    "category": "cv",
+    "tex": "cv/duke-cv.tex",
+    "pdf": "cv/duke-cv.pdf",
+    "source_url_tex": "https://sites.math.duke.edu/computing/tex/templates/CV.tex",
+    "source_url_ps": "https://sites.math.duke.edu/computing/tex/templates/CV.ps",
+    "institution": "Duke University",
+    "description": "Curriculum vitae template from Duke Math computing resources",
+    "notable_features": ["article class", "custom formatting", "tables", "sections", "lists"],
+    "notes": "Original was PostScript; converted to PDF via ps2pdf. Uses older \\documentstyle syntax."
+  },
+  {
+    "id": "utoledo-syllabus",
+    "category": "syllabus",
+    "tex": "syllabus/utoledo-math2850.tex",
+    "pdf": "syllabus/utoledo-math2850.pdf",
+    "source_url_tex": "https://www.utoledo.edu/nsm/mathstats/docs/syllabus-templates/UT-Math2850-Syllabus-2020.tex",
+    "source_url_pdf": "https://www.utoledo.edu/nsm/mathstats/docs/syllabi/UT-Math2850-Syllabus-2020.pdf",
+    "institution": "University of Toledo",
+    "description": "Calculus II course syllabus template",
+    "notable_features": ["article class", "geometry", "tables", "tabular", "lists", "URLs", "sections"],
+    "notes": "Official departmental syllabus template for Math 2850 (Calculus II)."
+  },
+  {
+    "id": "duke-exam",
+    "category": "exam",
+    "tex": "exam/duke-exam.tex",
+    "pdf": "exam/duke-exam.pdf",
+    "source_url_tex": "https://sites.math.duke.edu/computing/tex/templates/examTEMPLATE.tex",
+    "source_url_ps": "https://sites.math.duke.edu/computing/tex/templates/examTEMPLATE.ps",
+    "institution": "Duke University",
+    "description": "Math exam template with sample problem types",
+    "notable_features": ["article class", "custom macros", "math", "enumerate", "verbatim", "point counting"],
+    "notes": "Original was PostScript; converted to PDF via ps2pdf. Requires testpoints.tex (included as duke-exam-testpoints.tex)."
+  },
+  {
+    "id": "bu-homework",
+    "category": "homework",
+    "tex": "homework/bu-cs237-hw.tex",
+    "pdf": "homework/bu-cs237-hw.pdf",
+    "source_url_tex": "https://cs-people.bu.edu/januario/teaching/cs237/sample-hw-solution.tex",
+    "source_url_pdf": "https://cs-people.bu.edu/januario/teaching/cs237/sample-hw-solution.pdf",
+    "institution": "Boston University",
+    "description": "CS237 Probability sample homework solution",
+    "notable_features": ["article class", "amsmath", "amssymb", "theorem environments", "proofs", "math", "enumerate"],
+    "notes": "Sample homework solution for CS237 Probability in Computing."
+  },
+  {
+    "id": "uw-homework",
+    "category": "homework",
+    "tex": "homework/uw-amath586-hw.tex",
+    "pdf": "homework/uw-amath586-hw.pdf",
+    "source_url_tex": "https://faculty.washington.edu/rjl/fdmbook/exercises/am586hw1.tex",
+    "source_url_pdf": "https://faculty.washington.edu/rjl/fdmbook/exercises/am586hw1.pdf",
+    "institution": "University of Washington",
+    "description": "AMath 586 homework assignment (numerical PDEs)",
+    "notable_features": ["article class", "custom macros", "math", "enumerate", "display equations"],
+    "notes": "Homework assignment from AMath 586 (Numerical Analysis of Time-Dependent Problems). Uses macros.tex."
+  }
+]
