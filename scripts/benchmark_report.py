@@ -30,9 +30,12 @@ TEST_PAIRS = [
     ("theory/exam/exam2.tex", "theory/exam/exam2.pdf"),
     ("theory/exam/exam3.tex", "theory/exam/exam3.pdf"),
     ("theory/hw/01induction.tex", "theory/hw/01induction.pdf"),
+    ("theory/hw/01induction-sol.tex", "theory/hw/01induction-sol.pdf"),
     ("theory/hw/02pumping-sol.tex", "theory/hw/02pumping-sol.pdf"),
     ("theory/lecture/01problems.tex", "theory/lecture/01problems.pdf"),
     ("theory/lecture/04closure.tex", "theory/lecture/04closure.pdf"),
+    ("theory/lecture/05nfa.tex", "theory/lecture/05nfa.pdf"),
+    ("theory/lecture/07regexp.tex", "theory/lecture/07regexp.pdf"),
 ]
 
 EXTERNAL_DIR = ROOT / "benchmarks" / "external"
@@ -48,6 +51,16 @@ EXTERNAL_PAIRS = [
     ("benchmarks/external/exam/duke-exam.tex", "benchmarks/external/exam/duke-exam.pdf"),
     ("benchmarks/external/homework/bu-cs237-hw.tex", "benchmarks/external/homework/bu-cs237-hw.pdf"),
     ("benchmarks/external/homework/uw-amath586-hw.tex", "benchmarks/external/homework/uw-amath586-hw.pdf"),
+    ("benchmarks/external/beamer/stanford-beamer.tex", "benchmarks/external/beamer/stanford-beamer.pdf"),
+    ("benchmarks/external/beamer/ucdavis-beamer.tex", "benchmarks/external/beamer/ucdavis-beamer.pdf"),
+    ("benchmarks/external/beamer/metropolis-demo.tex", "benchmarks/external/beamer/metropolis-demo.pdf"),
+    ("benchmarks/external/homework/ucsd-math184a-hw.tex", "benchmarks/external/homework/ucsd-math184a-hw.pdf"),
+    ("benchmarks/external/homework/ucsd-math184a-hw5.tex", "benchmarks/external/homework/ucsd-math184a-hw5.pdf"),
+    ("benchmarks/external/homework/upenn-cs446-hw.tex", "benchmarks/external/homework/upenn-cs446-hw.pdf"),
+    ("benchmarks/external/homework/jdavis-hw-template.tex", "benchmarks/external/homework/jdavis-hw-template.pdf"),
+    ("benchmarks/external/homework/sfsu-csc746-hw.tex", "benchmarks/external/homework/sfsu-csc746-hw.pdf"),
+    ("benchmarks/external/paper/cambridge-dist-sys.tex", "benchmarks/external/paper/cambridge-dist-sys.pdf"),
+    ("benchmarks/external/paper/elegantpaper-en.tex", "benchmarks/external/paper/elegantpaper-en.pdf"),
 ]
 
 OUTPUT_DIR = ROOT / "demos" / "output"

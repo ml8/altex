@@ -1,0 +1,109 @@
+% 5/22/2025 updated to use more common IEEEtran class file
+% see https://www.ieee.org/conferences/publishing/templates
+\documentclass[11pt,final,conference]{IEEEtran}
+
+\usepackage{cite}
+\usepackage{physics,amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+
+%% wes 8/2021 additions
+\usepackage{comment}    % wes 8/2021
+\usepackage{color}      % wes 8/2021
+\usepackage{listings}   % wes 8/2021
+
+% wes: for code formatting/coloring
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{codecyan}{rgb}{0.0,0.2,1.0}
+
+% see: https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
+% set font, size, color style for code listings
+\lstdefinestyle{mystyle}{
+%    backgroundcolor=\color{backcolour},   
+    commentstyle=\textcolor{codegreen},
+%    keywordstyle=\color{magenta},    
+    keywordstyle=\color{codecyan},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,    
+    breaklines=true,    
+    captionpos=b,    
+    keepspaces=true,    
+    numbers=left,    
+    numbersep=2pt,  
+    firstnumber=auto,
+    numberblanklines=false,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+% and then set mystyle to be the default when doing code listings
+\lstset{style=mystyle}
+
+
+\begin{document}
+
+% these force page numbering to be turned on
+\thispagestyle{plain}
+\pagestyle{plain}
+
+
+%% Paper title.
+
+\title{Your Title Goes Here \\Assignment \#X, CSC 746, Fall 2025}
+
+% IEEEtran way of specifying authors
+\author{
+\IEEEauthorblockN{Your Name Here}
+\IEEEauthorblockA{Computer Science Department\\
+San Francisco State University\\
+San Francisco, CA, USA\\
+Email: whodis@sfsu.edu}
+% \and
+% \IEEEauthorblockN{Homer Simpson}
+% \IEEEauthorblockA{Twentieth Century Fox\\
+% Springfield, USA\\
+% Email: homer@thesimpsons.com}
+}
+
+\maketitle
+
+%% Abstract section.
+\begin{abstract}
+Please take a few moments and try to compose an abstract for your homework writeup. It should contain these ideas: what was the problem being studied, what was the approach (what did you implement), what are the results.
+The abstract should describe the basic message of the paper, including: the problem, why your solution should be of interest, some notion that your solution is effective, and a teaser about how it has been evaluated. Cover all of this using between 75 and 150 words. Thus, the abstract is the hardest part to write. Sometimes I try to write it first, but the final version is usually composed of items drawn from the introduction, and then condensed, as the last step of writing the paper.
+\end{abstract}
+
+
+
+\input{01_introduction}
+\input{02_relatedWork}
+\input{03_implementation}
+\input{04_evaluation}
+
+
+
+%% if specified like this the section will be committed in review mode
+\section*{Acknowledgement}
+For homework writeups, you may comment out the Acknowledgements section.
+The authors wish to thank A, B, C. This work was supported in part by
+a grant from XYZ.
+\textit{Comment:} you don't need this section in homework assignments, but you will need it when you create a final, camera-ready version of a technical paper for publication.
+
+%\bibliographystyle{abbrv}
+\bibliographystyle{abbrv-doi}
+%\bibliographystyle{abbrv-doi-narrow}
+%\bibliographystyle{abbrv-doi-hyperref}
+%\bibliographystyle{abbrv-doi-hyperref-narrow}
+
+% uncomment the following line if you decide to include a bibliography (references) with your homework writeup
+\bibliography{template}
+\end{document}
