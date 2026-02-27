@@ -1,4 +1,4 @@
-# accessible-latex
+# altex
 
 **altex** — a proof-of-concept tool that post-processes LaTeX-generated PDFs
 to embed accessibility structure tags and alt-text.
