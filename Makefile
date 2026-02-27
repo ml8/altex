@@ -1,5 +1,7 @@
 .PHONY: install install-node run serve demo demo-speech demo-alt demo-all \
-       docker docker-run clean help
+       docker docker-run benchmark benchmark-full \
+       gke-setup gke-deploy gke-teardown gke-status \
+       clean help
 
 VENV   := .venv
 PIP    := $(VENV)/bin/pip
@@ -46,7 +48,7 @@ docker: ## Build Docker image
 	docker build -t altex .
 
 docker-run: docker ## Build and run Docker container
-	docker run --rm -p 5000:5000 altex
+	docker run --rm -p 5001:5000 altex
 
 # ── Demos ──────────────────────────────────────────────────────────────
 
@@ -74,6 +76,22 @@ benchmark: install ## Run PDF/UA-1 benchmarks on existing tagged PDFs
 
 benchmark-full: install ## Regenerate all tagged PDFs and benchmark
 	./scripts/benchmark.sh --tag-first
+
+# ── GKE Deployment ────────────────────────────────────────────────────
+
+gke-setup: ## One-time GKE infrastructure setup (cluster, registry, IP)
+	./k8s/gke-setup.sh
+
+gke-deploy: ## Build, push image, and deploy to GKE
+	./k8s/gke-deploy.sh
+
+gke-teardown: ## Delete all GKE resources (cluster, registry, IP)
+	./k8s/gke-teardown.sh
+
+gke-status: ## Check GKE deployment status
+	@kubectl get pods -l app=altex 2>/dev/null || echo "Not connected to a cluster"
+	@kubectl get ingress altex 2>/dev/null || true
+	@kubectl describe managedcertificate altex-cert 2>/dev/null || true
 
 # ── Clean ──────────────────────────────────────────────────────────────
 

@@ -107,3 +107,24 @@ For our service version, will we have races on file-based manipulations, or are 
 ## Prompt 27
 
 Perfect. Let's do your minor simplifications. Let's move the bencharks out of benchmarks/external and just into benchmarks/ -- eliminating the concept of an external benchmark and just having one collection of benchmarks. Demos should just be runs on the benchmarks. Make sense? Finally, update the prompts.md file with our prompts from this session.
+
+## Prompt 28
+
+The application, as written, should be horizontally scalable. Please research best practices for deployment on GCP behind GKE in 2026 for an app of this complexity. Remember, simpler is better. This will be served through a subdomain of another domain (e.g., altex.ml8.sh or something similar). I want to have as little configuration related to this, or code related to this in our docker containers. Please assess my thinking--am I correct about its horizontal scalability? Please let me know what the simplest way to configure this for GKE would be, including how I would configure my subdomain to point to this. Finally, please create a plan for this and let me review it. We should make this app follow modern best practices for someone who might want to deploy this on kubernetes. We should make our configuration general, with a GCP-GKE-specific instantiation, with further variables that control our project/domain/etc. In your plan, when you appeal to these kubernetes and GKE best practices for small, scalable, stateless apps, please note what these best practices are and where you found them. It is the year 2026. Prefer references from 2026 or 2025 to earlier references.
+
+## Prompt 29
+
+Please check out my Feedback, which contains further instructions, guidance, and a question that I would like for you to answer before we proceed.
+
+## Prompt 30
+
+It looks like the docker container doesn't contain verapdf -- can you make sure that the environment is properly set up in the containers? PDF/UA Validation
+verapdf not available — install from verapdf.org for PDF/UA validation.
+
+## Prompt 31
+
+Great. I added a screenshot to the docs folder. Please update the README to include the screenshot. Also create a "screenshot" of a run in the terminal with a source and destination file along with the report that's generated for the tui. Actually, create a script that does this and updates the readme. Then check that into scripts. Call the script update_readme.sh and it should replace the contents of the tag (you should add the tag to readme) [[TUI]] with the script output. Make the formatting mimic a terminal.
+
+## Prompt 32
+
+Make the TUI demo use the real filenames. It is disingenuous and a lie to claim that it results in full compliance for arbitrary files. We will have errors and we should admit that. This is not the end-all-be-all of doing this work, it's an iterative approach, and we haven't even validate the accessibility against actual users. DO NOT use hyperbolic language and claims, even if they are implied (as they were here, with source.tex original.pdf etc.

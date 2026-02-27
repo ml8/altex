@@ -30,62 +30,62 @@ three interfaces: a CLI, a Flask web API, and a Docker container.
 
 ```
 altex/                     # Core pipeline (no web dependencies)
-├── models.py              # Tag enum + DocumentNode dataclass
-├── latex_parser.py        # parse(tex_path) → DocumentNode
-│                          #   Uses pylatexenc LatexWalker with custom context
-│                          #   (_latex_context adds \paragraph, \href, \url specs)
-├── pdf_tagger.py          # tag(pdf_path, tree, output_path, lang, title)
-│                          #   1. Sets metadata (Lang, title, tabs, MarkInfo, pdfuaid)
-│                          #   2. Tags content streams (per-TJ BDC/EMC with MCIDs)
-│                          #   3. Marks non-text content as Artifact
-│                          #   4. Builds structure tree + parent tree
-│                          #   5. Links structure elements to MCIDs via text matching
-│                          #   6. Links PDF annotations to /Link StructElems
-├── verapdf.py             # validate(pdf_path) → dict | None
-│                          #   Shared verapdf wrapper for web UI and benchmarks
-├── math_speech.py         # latex_to_speech(formulas, engine) → list[str]
-│                          #   Pluggable: "sre" (latex2mathml+SRE), "mathjax", "none"
-│                          #   Isolated: imports only stdlib + latex2mathml
-│                          #   Uses short-lived batch subprocess (not IPC daemon)
-├── alt_document.py        # generate_alt_html(tree, title) → str
-│                          #   embed_alt_document(pdf_path, html, output_path)
-│                          #   Isolated: imports only models + pikepdf + latex2mathml
-├── encoding_fixer.py      # fix_encoding(input_path, output_path)
-│                          #   Isolated: shells out to Ghostscript (gs)
-├── cli.py                 # CLI: python -m altex source.tex input.pdf -o out.pdf
-└── __main__.py            # Entry point for python -m altex
+|-- models.py              # Tag enum + DocumentNode dataclass
+|-- latex_parser.py        # parse(tex_path) -> DocumentNode
+|                          #   Uses pylatexenc LatexWalker with custom context
+|                          #   (_latex_context adds \paragraph, \href, \url specs)
+|-- pdf_tagger.py          # tag(pdf_path, tree, output_path, lang, title)
+|                          #   1. Sets metadata (Lang, title, tabs, MarkInfo, pdfuaid)
+|                          #   2. Tags content streams (per-TJ BDC/EMC with MCIDs)
+|                          #   3. Marks non-text content as Artifact
+|                          #   4. Builds structure tree + parent tree
+|                          #   5. Links structure elements to MCIDs via text matching
+|                          #   6. Links PDF annotations to /Link StructElems
+|-- verapdf.py             # validate(pdf_path) -> dict | None
+|                          #   Shared verapdf wrapper for web UI and benchmarks
+|-- math_speech.py         # latex_to_speech(formulas, engine) -> list[str]
+|                          #   Pluggable: "sre" (latex2mathml+SRE), "mathjax", "none"
+|                          #   Isolated: imports only stdlib + latex2mathml
+|                          #   Uses short-lived batch subprocess (not IPC daemon)
+|-- alt_document.py        # generate_alt_html(tree, title) -> str
+|                          #   embed_alt_document(pdf_path, html, output_path)
+|                          #   Isolated: imports only models + pikepdf + latex2mathml
+|-- encoding_fixer.py      # fix_encoding(input_path, output_path)
+|                          #   Isolated: shells out to Ghostscript (gs)
+|-- cli.py                 # CLI: python -m altex source.tex input.pdf -o out.pdf
+`-- __main__.py            # Entry point for python -m altex
 
 scripts/                   # Benchmarks and Node.js workers
-├── benchmark.sh           # Run PDF/UA-1 benchmarks via verapdf
-├── benchmark_report.py    # Benchmark runner + report generator
-├── sre_worker.js          # Batch MathML→speech via SRE (stdin/stdout)
-├── mathjax_worker.js      # Batch LaTeX→speech via mathjax-full+SRE
-└── run-local.sh           # Start Flask dev server locally
+|-- benchmark.sh           # Run PDF/UA-1 benchmarks via verapdf
+|-- benchmark_report.py    # Benchmark runner + report generator
+|-- sre_worker.js          # Batch MathML->speech via SRE (stdin/stdout)
+|-- mathjax_worker.js      # Batch LaTeX->speech via mathjax-full+SRE
+`-- run-local.sh           # Start Flask dev server locally
 
 web/                       # Flask web interface
-├── app.py                 # POST /api/tag, GET /api/download/<id>, GET /
-└── static/index.html      # Single-file frontend (vanilla HTML/CSS/JS)
+|-- app.py                 # POST /api/tag, GET /api/download/<id>, GET /
+`-- static/index.html      # Single-file frontend (vanilla HTML/CSS/JS)
 
 docs/                      # Project documentation
-├── design.md              # Architecture, design decisions, feature status
-├── pdf-tagging-reference.md  # PDF structure tag types reference
-└── math-speech-and-alt-document.md  # Phase 4 design plan
+|-- design.md              # Architecture, design decisions, feature status
+|-- pdf-tagging-reference.md  # PDF structure tag types reference
+`-- math-speech-and-alt-document.md  # Phase 4 design plan
 
 demos/                     # Demo scripts (run against benchmarks/)
-├── demo_compare.sh        # Before/after comparison
-├── demo_math_alttext.sh   # Math formula alt-text showcase
-├── demo_math_speech.sh    # Math-to-speech engine comparison
-├── demo_alt_document.sh   # Embedded alternative HTML demo
-└── demo_tag_all.sh        # Batch-tag representative benchmark docs
+|-- demo_compare.sh        # Before/after comparison
+|-- demo_math_alttext.sh   # Math formula alt-text showcase
+|-- demo_math_speech.sh    # Math-to-speech engine comparison
+|-- demo_alt_document.sh   # Embedded alternative HTML demo
+`-- demo_tag_all.sh        # Batch-tag representative benchmark docs
 
 benchmarks/                # PDF/UA benchmark corpus (.tex + .pdf pairs)
-├── beamer/                # Beamer presentations (Tufts, Stanford, etc.)
-├── cv/                    # CV templates
-├── exam/                  # Exam templates
-├── homework/              # Homework (ML, combinatorics, HPC, etc.)
-├── paper/                 # Papers and lecture notes
-├── syllabus/              # Course syllabi
-└── manifest.json          # Metadata for all benchmark documents
+|-- beamer/                # Beamer presentations (Tufts, Stanford, etc.)
+|-- cv/                    # CV templates
+|-- exam/                  # Exam templates
+|-- homework/              # Homework (ML, combinatorics, HPC, etc.)
+|-- paper/                 # Papers and lecture notes
+|-- syllabus/              # Course syllabi
+`-- manifest.json          # Metadata for all benchmark documents
 ```
 
 ## How to Build and Run

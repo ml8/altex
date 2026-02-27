@@ -1,0 +1,26 @@
+# GKE Ingress — routes external HTTPS traffic to the altex Service.
+#
+# Annotations:
+#   kubernetes.io/ingress.class: "gce"
+#     → use the GKE-managed external Application Load Balancer
+#   kubernetes.io/ingress.global-static-ip-name: "altex-ip"
+#     → bind to a reserved global static IP (create with gcloud)
+#   networking.gke.io/managed-certificates: "altex-cert"
+#     → attach the Google-managed TLS certificate
+#
+# See: https://cloud.google.com/kubernetes-engine/docs/concepts/ingress
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: altex
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: "altex-ip"
+    networking.gke.io/managed-certificates: "altex-cert"
+spec:
+  defaultBackend:
+    service:
+      name: altex
+      port:
+        number: 80

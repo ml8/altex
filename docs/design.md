@@ -6,20 +6,20 @@ altex is a two-stage pipeline that makes LaTeX-generated PDFs accessible:
 
 ```
 LaTeX source (.tex)     Compiled PDF (.pdf)
-        │                       │
-        ▼                       │
-┌────────────────┐              │
-│  latex_parser   │              │
-│  pylatexenc     │              │
-└───────┬────────┘              │
-        │  DocumentNode tree    │
-        ▼                      ▼
-┌──────────────────────────────────┐
-│  pdf_tagger                      │
-│  pikepdf + pymupdf               │
-└───────────────┬──────────────────┘
-                │
-                ▼
+        |                       |
+        v                       |
++----------------+              |
+|  latex_parser  |              |
+|  pylatexenc    |              |
++-------+--------+              |
+        |  DocumentNode tree    |
+        v                       v
++----------------------------------+
+|  pdf_tagger                      |
+|  pikepdf + pymupdf               |
++---------------+------------------+
+                |
+                v
          Tagged PDF (.pdf)
 ```
 

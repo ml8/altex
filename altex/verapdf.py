@@ -1,7 +1,7 @@
 """Run verapdf PDF/UA-1 validation on a PDF file.
 
 This module wraps the ``verapdf`` command-line tool and parses its JSON
-output into a simple dict.  Shared by the web API (``web/app.py``) and
+output into a dict.  Shared by the web API (``web/app.py``) and
 the benchmark runner (``scripts/benchmark_report.py``).
 
 verapdf is the industry-standard open-source PDF/UA validator, developed

@@ -41,12 +41,17 @@
   .rule-list li { margin-bottom: .25rem; }
   .rule-fixed { color: #1a7f37; }
   .rule-remaining { color: #9a6700; }
+  .info-section { margin-top: 3rem; border-top: 1px solid #ddd; padding-top: 1.5rem; color: #444; font-size: 0.9rem; }
+  .info-section h2 { font-size: 1.2rem; color: #1a1a1a; }
+  .info-section h3 { font-size: 1rem; margin-top: 1rem; }
+  .info-section ul { padding-left: 1.2rem; }
+  .info-section li { margin-bottom: 0.25rem; }
 </style>
 </head>
 <body>
 
 <h1>altex <span>Accessible LaTeX</span></h1>
-<p>Upload your LaTeX source and compiled PDF to generate an accessibility-tagged PDF.</p>
+<p>Upload your LaTeX source and compiled PDF to embed accessibility tags and alt-text.</p>
 
 <form id="form">
   <label>LaTeX source (.tex)
@@ -97,6 +102,32 @@
     <tbody id="elem-body"></tbody>
   </table>
   <a id="dl-link" class="dl" href="#">⬇ Download Tagged PDF</a>
+</div>
+
+<div class="info-section">
+  <h2>About this tool</h2>
+  <p>
+    <strong>altex</strong> is a proof-of-concept utility that enhances PDF accessibility by
+    post-processing files generated from LaTeX. It uses the semantic structure from your
+    source <code>.tex</code> file to tag the compiled PDF.
+  </p>
+  
+  <h3>How it works</h3>
+  <ul>
+    <li><strong>Parses LaTeX:</strong> Extracts document structure (headings, lists, math, figures) from your source code.</li>
+    <li><strong>Tags PDF:</strong> Maps this structure to the PDF content, adding PDF/UA accessibility tags.</li>
+    <li><strong>Fixes Metadata:</strong> Sets required metadata like title, language, and tab order.</li>
+    <li><strong>Validates:</strong> Checks the result against PDF/UA-1 standards using verapdf.</li>
+  </ul>
+
+  <p>
+    <em>Note:</em> This is an automated tool. While it significantly improves accessibility compliance,
+    complex documents may still require manual verification.
+  </p>
+  
+  <p>
+    <a href="https://github.com/ml8/accessible-latex" target="_blank">View source on GitHub</a>
+  </p>
 </div>
 
 <script>
@@ -217,7 +248,20 @@ form.addEventListener('submit', async (e) => {
       eb.appendChild(tr);
     }
 
-    document.getElementById('dl-link').href = data.download_url;
+    // Download link — handle both storage modes.
+    const dlLink = document.getElementById('dl-link');
+    if (data.pdf_base64) {
+      // Inline mode: decode base64 to blob URL.
+      const binary = atob(data.pdf_base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      dlLink.href = URL.createObjectURL(blob);
+      dlLink.download = 'tagged.pdf';
+    } else if (data.download_url) {
+      // Local mode: use server download URL.
+      dlLink.href = data.download_url;
+    }
     results.style.display = 'block';
     status.textContent = 'Done.';
   } catch (err) {

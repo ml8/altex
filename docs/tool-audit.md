@@ -13,8 +13,7 @@ error counts, and context paths.
 
 ### Reputation in the literature
 
-verapdf is widely regarded as the **industry-standard open-source PDF/UA
-validator**.  Key points from the accessibility literature:
+verapdf is an open-source PDF/UA validator.  Key points from the accessibility literature:
 
 - The PDF Association's own comparative study of validators (verapdf,
   PAC, Acrobat Preflight, CommonLook) found verapdf provides the most
@@ -195,7 +194,7 @@ and either renumber or warn.
 | Failure rate | 54.3% | 0.7% | 0.7% |
 
 altex now fixes **12 of the original rule categories** across all test
-documents.  The internal corpus achieves near-perfect PDF/UA-1 compliance
+documents.  The internal corpus achieves high PDF/UA-1 compliance
 (0.03% failure rate with encoding fix).  The external corpus reveals
 additional failure categories specific to certain document types.
 
@@ -257,7 +256,7 @@ categories not present in the internal corpus:
 6. **Use verapdf as the regression oracle**
    - Run `scripts/benchmark.sh` before/after every change
    - Track failure counts over time
-   - The benchmark report already provides the data; we just need to
+   - The benchmark report already provides the data; we need to
      compare runs
 
 7. **Maximize source-document information usage**

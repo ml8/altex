@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: altex
+  labels:
+    app: altex
+spec:
+  selector:
+    matchLabels:
+      app: altex
+  template:
+    metadata:
+      labels:
+        app: altex
+    spec:
+      containers:
+        - name: altex
+          image: altex:latest  # overridden by kustomization.yaml
+          ports:
+            - containerPort: 5000
+          env:
+            - name: ALTEX_STORAGE
+              value: "inline"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 3
+            periodSeconds: 5

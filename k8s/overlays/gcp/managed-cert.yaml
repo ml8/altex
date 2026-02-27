@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+  - ingress.yaml
+  - managed-cert.yaml
+
+# Override the container image for GCP Artifact Registry.
+# Change these values for your project:
+#   GCP_REGION:  e.g. us-central1
+#   GCP_PROJECT: your GCP project ID
+images:
+  - name: altex
+    newName: us-west1-docker.pkg.dev/lang-gcp/altex/altex
+    newTag: latest

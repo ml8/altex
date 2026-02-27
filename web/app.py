@@ -3,8 +3,13 @@
 Routes
 ------
     GET  /                  — serve the frontend
+    GET  /healthz           — health check for K8s probes
     POST /api/tag           — upload .tex + .pdf, run pipeline, return summary
-    GET  /api/download/<id> — download a tagged PDF
+    GET  /api/download/<id> — download a tagged PDF (local storage mode only)
+
+Storage modes (ALTEX_STORAGE env var):
+    local  — (default) store tagged PDF on filesystem, return download URL
+    inline — return PDF as base64 in the JSON response (stateless, for K8s)
 
 The /api/tag endpoint returns a JSON summary that includes:
 - Structure element counts and alt-text coverage
@@ -14,6 +19,8 @@ The /api/tag endpoint returns a JSON summary that includes:
 
 from __future__ import annotations
 
+import base64
+import os
 import shutil
 import tempfile
 import uuid
@@ -28,8 +35,11 @@ from altex.verapdf import validate as validate_pdfua
 
 app = Flask(__name__, static_folder="static", static_url_path="")
 
-# Tagged PDFs are stored here until downloaded.
-_RESULTS_DIR = Path(tempfile.mkdtemp(prefix="altex_"))
+# Storage mode: "local" (filesystem + download URL) or "inline" (base64).
+_STORAGE = os.environ.get("ALTEX_STORAGE", "local")
+
+# Tagged PDFs are stored here in "local" mode until downloaded.
+_RESULTS_DIR = Path(tempfile.mkdtemp(prefix="altex_")) if _STORAGE == "local" else None
 
 
 # ---------------------------------------------------------------------------
@@ -40,6 +50,12 @@ _RESULTS_DIR = Path(tempfile.mkdtemp(prefix="altex_"))
 @app.route("/")
 def index():
     return app.send_static_file("index.html")
+
+
+@app.route("/healthz")
+def healthz():
+    """Health check for Kubernetes liveness/readiness probes."""
+    return jsonify(status="ok")
 
 
 @app.route("/api/tag", methods=["POST"])
@@ -98,8 +114,8 @@ def api_tag():
                 for node, speech in zip(formula_nodes, speeches):
                     node.text = speech
 
-        result_id = uuid.uuid4().hex[:12]
-        out_path = _RESULTS_DIR / f"{result_id}.pdf"
+        # Write tagged PDF.
+        out_path = work / "tagged.pdf"
         tag(pdf_path, tree, out_path, lang=lang, title=title)
 
         # Embed alternative HTML.
@@ -111,10 +127,22 @@ def api_tag():
         validation_after = validate_pdfua(out_path)
 
         summary = _summarize(out_path, tree)
-        summary["id"] = result_id
-        summary["download_url"] = f"/api/download/{result_id}"
         summary["validation_before"] = validation_before
         summary["validation_after"] = validation_after
+
+        if _STORAGE == "inline":
+            # Stateless: return PDF as base64 in JSON response.
+            pdf_bytes = out_path.read_bytes()
+            summary["pdf_base64"] = base64.b64encode(pdf_bytes).decode("ascii")
+            summary["storage"] = "inline"
+        else:
+            # Local: store on filesystem, return download URL.
+            result_id = uuid.uuid4().hex[:12]
+            final_path = _RESULTS_DIR / f"{result_id}.pdf"
+            shutil.copy2(out_path, final_path)
+            summary["id"] = result_id
+            summary["download_url"] = f"/api/download/{result_id}"
+            summary["storage"] = "local"
 
         return jsonify(summary)
 
@@ -126,6 +154,9 @@ def api_tag():
 
 @app.route("/api/download/<result_id>")
 def api_download(result_id: str):
+    """Download a tagged PDF (local storage mode only)."""
+    if _STORAGE != "local" or _RESULTS_DIR is None:
+        return jsonify(error="Download not available in inline storage mode."), 404
     path = _RESULTS_DIR / f"{result_id}.pdf"
     if not path.is_file():
         return jsonify(error="Result not found or expired."), 404
