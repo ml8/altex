@@ -18,3 +18,5 @@ demos/output/
 
 # Web temp files
 web/uploads/
+
+*.mine

@@ -29,10 +29,13 @@ RUN curl -sL https://software.verapdf.org/releases/verapdf-installer.zip \
     apt-get purge -y unzip curl && apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
+# Create non-root user for running the application.
+RUN useradd -m -u 1000 appuser
+
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt flask gunicorn
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY package.json .
 RUN npm install --production
@@ -40,10 +43,17 @@ RUN npm install --production
 COPY altex/ altex/
 COPY web/ web/
 COPY scripts/ scripts/
+COPY benchmarks/ benchmarks/
+
+# Set ownership of /app to appuser.
+RUN chown -R appuser:appuser /app
 
 ENV FLASK_APP=web.app
 ENV ALTEX_STORAGE=inline
 EXPOSE 5000
+
+# Switch to non-root user.
+USER appuser
 
 CMD ["gunicorn", "web.app:app", \
      "--bind", "0.0.0.0:5000", \

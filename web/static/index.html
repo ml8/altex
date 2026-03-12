@@ -157,9 +157,51 @@ form.addEventListener('submit', async (e) => {
 
   try {
     const res = await fetch('/api/tag', { method: 'POST', body: fd });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Server error');
+    if (!res.ok) {
+       const errJson = await res.json().catch(() => ({}));
+       throw new Error(errJson.error || res.statusText || 'Server error');
+    }
 
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop(); // Keep the last partial line
+
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        try {
+          const msg = JSON.parse(line);
+          
+          if (msg.type === 'progress') {
+            status.textContent = msg.msg;
+          } else if (msg.type === 'error') {
+            throw new Error(msg.msg);
+          } else if (msg.type === 'result') {
+            renderResults(msg.data);
+          }
+        } catch (e) {
+          // If we can't parse the line, or if the message handler throws
+          if (e.message) throw e; 
+          console.warn('Stream parse error:', e);
+        }
+      }
+    }
+  } catch (err) {
+    status.textContent = err.message;
+    status.className = 'error';
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function renderResults(data) {
     // Validation comparison (before → after).
     const vs = document.getElementById('validation-section');
     vs.innerHTML = '';
@@ -264,13 +306,8 @@ form.addEventListener('submit', async (e) => {
     }
     results.style.display = 'block';
     status.textContent = 'Done.';
-  } catch (err) {
-    status.textContent = err.message;
-    status.className = 'error';
-  } finally {
-    btn.disabled = false;
-  }
-});
+}
+
 </script>
 </body>
 </html>

@@ -327,6 +327,8 @@ def main():
                         help="Run altex pipeline before validating (regenerates tagged PDFs)")
     parser.add_argument("--output-json", type=Path,
                         help="Write raw results as JSON to this path")
+    parser.add_argument("--fail-on-regression", type=Path,
+                        help="Fail if results are worse than this baseline JSON file")
     args = parser.parse_args()
 
     # Check verapdf
@@ -354,6 +356,62 @@ def main():
         with open(args.output_json, "w") as f:
             json.dump([asdict(b) for b in benchmarks], f, indent=2)
         print(f"JSON results written to {args.output_json}")
+
+    # Check for regression if requested
+    if args.fail_on_regression:
+        try:
+            with open(args.fail_on_regression) as f:
+                baseline_data = json.load(f)
+            
+            # Map baseline by document name -> failed_checks count
+            baseline_map = {}
+            for entry in baseline_data:
+                # Handle both list of dicts (new format) and whatever format might exist
+                # We expect the same structure as we dump above
+                name = entry.get("name")
+                
+                # We care about the final result (encoded or tagged)
+                # entry is a dict corresponding to DocumentBenchmark dataclass
+                # "tagged_encoded" -> "failed_checks"
+                
+                # Get the best result from baseline
+                best_fail = None
+                if entry.get("tagged_encoded") and not entry["tagged_encoded"].get("error"):
+                    best_fail = entry["tagged_encoded"]["failed_checks"]
+                elif entry.get("tagged") and not entry["tagged"].get("error"):
+                    best_fail = entry["tagged"]["failed_checks"]
+                
+                if name and best_fail is not None:
+                    baseline_map[name] = best_fail
+
+            regressions = []
+            for b in benchmarks:
+                # Determine current best
+                curr_fail = None
+                if b.tagged_encoded and not b.tagged_encoded.error:
+                    curr_fail = b.tagged_encoded.failed_checks
+                elif b.tagged and not b.tagged.error:
+                    curr_fail = b.tagged.failed_checks
+                
+                if curr_fail is None:
+                    continue # Skip if current run failed completely (already reported as error)
+
+                base_fail = baseline_map.get(b.name)
+                if base_fail is not None:
+                    if curr_fail > base_fail:
+                        regressions.append(f"{b.name}: {curr_fail} failures (baseline: {base_fail})")
+            
+            if regressions:
+                print("\nREGRESSION DETECTED:")
+                for reg in regressions:
+                    print(f"  ❌ {reg}")
+                sys.exit(1)
+            else:
+                print("\n✅ No regressions detected against baseline.")
+                
+        except Exception as e:
+            print(f"ERROR checking regression: {e}", file=sys.stderr)
+            sys.exit(1)
 
 
 if __name__ == "__main__":

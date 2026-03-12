@@ -1,0 +1,2430 @@
+[
+  {
+    "name": "wm-thesis",
+    "tex_path": "benchmarks/paper/wm-thesis.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/paper/wm-thesis.pdf",
+      "passed_rules": 99,
+      "failed_rules": 7,
+      "passed_checks": 1516,
+      "failed_checks": 3813,
+      "failed_rule_details": [
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 8,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 2054,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 1747,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/wm-thesis_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 69672,
+      "failed_checks": 183,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 183,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/wm-thesis_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 80851,
+      "failed_checks": 121,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 121,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "cambridge-dist-sys",
+    "tex_path": "benchmarks/paper/cambridge-dist-sys.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/paper/cambridge-dist-sys.pdf",
+      "passed_rules": 94,
+      "failed_rules": 12,
+      "passed_checks": 37580,
+      "failed_checks": 29036,
+      "failed_rule_details": [
+        {
+          "clause": "7.18.1",
+          "test_number": 2,
+          "description": "An annotation (except Widget annotations or hidden annotations, or those having rectangle outside the crop-box) shall have either Contents key or an Alt entry in the enclosing structure element",
+          "status": "failed",
+          "failed_checks": 429,
+          "tags": [
+            "annotation",
+            "alt-text"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 15126,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 1,
+          "description": "Links shall be tagged according to ISO 32000-1:2008, 14.8.4.4.2, Link Element",
+          "status": "failed",
+          "failed_checks": 429,
+          "tags": [
+            "annotation"
+          ]
+        },
+        {
+          "clause": "7.18.3",
+          "test_number": 1,
+          "description": "Every page on which there is an annotation shall contain in its page dictionary the key Tabs, and its value shall be S",
+          "status": "failed",
+          "failed_checks": 87,
+          "tags": [
+            "page"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 92,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 2,
+          "description": "Links shall contain an alternate description via their Contents key as described in ISO 32000-1:2008, 14.9.3",
+          "status": "failed",
+          "failed_checks": 429,
+          "tags": [
+            "annotation",
+            "alt-text",
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 12409,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 2,
+          "description": "Natural language in the Outline entries shall be determined",
+          "status": "failed",
+          "failed_checks": 31,
+          "tags": [
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/cambridge-dist-sys_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 408244,
+      "failed_checks": 117,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 117,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/cambridge-dist-sys_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 666972,
+      "failed_checks": 502,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 502,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "elegantpaper-en",
+    "tex_path": "benchmarks/paper/elegantpaper-en.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/paper/elegantpaper-en.pdf",
+      "passed_rules": 94,
+      "failed_rules": 12,
+      "passed_checks": 1587,
+      "failed_checks": 865,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 430,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 1,
+          "description": "Links shall be tagged according to ISO 32000-1:2008, 14.8.4.4.2, Link Element",
+          "status": "failed",
+          "failed_checks": 15,
+          "tags": [
+            "annotation"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 2,
+          "description": "Links shall contain an alternate description via their Contents key as described in ISO 32000-1:2008, 14.9.3",
+          "status": "failed",
+          "failed_checks": 15,
+          "tags": [
+            "annotation",
+            "alt-text",
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 369,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.18.1",
+          "test_number": 2,
+          "description": "An annotation (except Widget annotations or hidden annotations, or those having rectangle outside the crop-box) shall have either Contents key or an Alt entry in the enclosing structure element",
+          "status": "failed",
+          "failed_checks": 15,
+          "tags": [
+            "annotation",
+            "alt-text"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 2,
+          "description": "Natural language in the Outline entries shall be determined",
+          "status": "failed",
+          "failed_checks": 12,
+          "tags": [
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.18.3",
+          "test_number": 1,
+          "description": "Every page on which there is an annotation shall contain in its page dictionary the key Tabs, and its value shall be S",
+          "status": "failed",
+          "failed_checks": 4,
+          "tags": [
+            "page"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/elegantpaper-en_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 18464,
+      "failed_checks": 1,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/elegantpaper-en_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 19015,
+      "failed_checks": 1,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "tufts-beamer",
+    "tex_path": "benchmarks/beamer/tufts-beamer.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/beamer/tufts-beamer.pdf",
+      "passed_rules": 94,
+      "failed_rules": 12,
+      "passed_checks": 1145,
+      "failed_checks": 2321,
+      "failed_rule_details": [
+        {
+          "clause": "7.18.1",
+          "test_number": 2,
+          "description": "An annotation (except Widget annotations or hidden annotations, or those having rectangle outside the crop-box) shall have either Contents key or an Alt entry in the enclosing structure element",
+          "status": "failed",
+          "failed_checks": 326,
+          "tags": [
+            "annotation",
+            "alt-text"
+          ]
+        },
+        {
+          "clause": "7.18.3",
+          "test_number": 1,
+          "description": "Every page on which there is an annotation shall contain in its page dictionary the key Tabs, and its value shall be S",
+          "status": "failed",
+          "failed_checks": 14,
+          "tags": [
+            "page"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 2,
+          "description": "Links shall contain an alternate description via their Contents key as described in ISO 32000-1:2008, 14.9.3",
+          "status": "failed",
+          "failed_checks": 326,
+          "tags": [
+            "annotation",
+            "alt-text",
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 818,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.21.5",
+          "test_number": 1,
+          "description": "For every font embedded in a conforming file and used for rendering, the glyph width information in the font dictionary and in the embedded font program shall be consistent",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 504,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 1,
+          "description": "Links shall be tagged according to ISO 32000-1:2008, 14.8.4.4.2, Link Element",
+          "status": "failed",
+          "failed_checks": 326,
+          "tags": [
+            "annotation"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 2,
+          "description": "Natural language in the Outline entries shall be determined",
+          "status": "failed",
+          "failed_checks": 2,
+          "tags": [
+            "lang"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/tufts-beamer_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 21590,
+      "failed_checks": 1,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.5",
+          "test_number": 1,
+          "description": "For every font embedded in a conforming file and used for rendering, the glyph width information in the font dictionary and in the embedded font program shall be consistent",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/tufts-beamer_tagged_encoded.pdf",
+      "passed_rules": 106,
+      "failed_rules": 0,
+      "passed_checks": 21772,
+      "failed_checks": 0,
+      "failed_rule_details": [],
+      "error": null
+    }
+  },
+  {
+    "name": "stanford-beamer",
+    "tex_path": "benchmarks/beamer/stanford-beamer.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/beamer/stanford-beamer.pdf",
+      "passed_rules": 95,
+      "failed_rules": 11,
+      "passed_checks": 837,
+      "failed_checks": 208,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 76,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.18.1",
+          "test_number": 2,
+          "description": "An annotation (except Widget annotations or hidden annotations, or those having rectangle outside the crop-box) shall have either Contents key or an Alt entry in the enclosing structure element",
+          "status": "failed",
+          "failed_checks": 8,
+          "tags": [
+            "annotation",
+            "alt-text"
+          ]
+        },
+        {
+          "clause": "7.18.3",
+          "test_number": 1,
+          "description": "Every page on which there is an annotation shall contain in its page dictionary the key Tabs, and its value shall be S",
+          "status": "failed",
+          "failed_checks": 4,
+          "tags": [
+            "page"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 1,
+          "description": "Links shall be tagged according to ISO 32000-1:2008, 14.8.4.4.2, Link Element",
+          "status": "failed",
+          "failed_checks": 8,
+          "tags": [
+            "annotation"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 98,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 2,
+          "description": "Links shall contain an alternate description via their Contents key as described in ISO 32000-1:2008, 14.9.3",
+          "status": "failed",
+          "failed_checks": 8,
+          "tags": [
+            "annotation",
+            "alt-text",
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 2,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/stanford-beamer_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 4522,
+      "failed_checks": 5,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 5,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/stanford-beamer_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 4711,
+      "failed_checks": 5,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 5,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "ucdavis-beamer",
+    "tex_path": "benchmarks/beamer/ucdavis-beamer.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/beamer/ucdavis-beamer.pdf",
+      "passed_rules": 92,
+      "failed_rules": 14,
+      "passed_checks": 1646,
+      "failed_checks": 2839,
+      "failed_rule_details": [
+        {
+          "clause": "7.18.5",
+          "test_number": 1,
+          "description": "Links shall be tagged according to ISO 32000-1:2008, 14.8.4.4.2, Link Element",
+          "status": "failed",
+          "failed_checks": 535,
+          "tags": [
+            "annotation"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 2,
+          "description": "Links shall contain an alternate description via their Contents key as described in ISO 32000-1:2008, 14.9.3",
+          "status": "failed",
+          "failed_checks": 535,
+          "tags": [
+            "annotation",
+            "alt-text",
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.21.5",
+          "test_number": 1,
+          "description": "For every font embedded in a conforming file and used for rendering, the glyph width information in the font dictionary and in the embedded font program shall be consistent",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.18.3",
+          "test_number": 1,
+          "description": "Every page on which there is an annotation shall contain in its page dictionary the key Tabs, and its value shall be S",
+          "status": "failed",
+          "failed_checks": 26,
+          "tags": [
+            "page"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 344,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 852,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.21.4.1",
+          "test_number": 1,
+          "description": "The font programs for all fonts used for rendering within a conforming file shall be embedded within that file, as defined in ISO 32000-1:2008, 9.9",
+          "status": "failed",
+          "failed_checks": 3,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.18.1",
+          "test_number": 2,
+          "description": "An annotation (except Widget annotations or hidden annotations, or those having rectangle outside the crop-box) shall have either Contents key or an Alt entry in the enclosing structure element",
+          "status": "failed",
+          "failed_checks": 535,
+          "tags": [
+            "annotation",
+            "alt-text"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 2,
+          "description": "Natural language in the Outline entries shall be determined",
+          "status": "failed",
+          "failed_checks": 3,
+          "tags": [
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/ucdavis-beamer_tagged.pdf",
+      "passed_rules": 103,
+      "failed_rules": 3,
+      "passed_checks": 24187,
+      "failed_checks": 15,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.5",
+          "test_number": 1,
+          "description": "For every font embedded in a conforming file and used for rendering, the glyph width information in the font dictionary and in the embedded font program shall be consistent",
+          "status": "failed",
+          "failed_checks": 3,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 9,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.21.4.1",
+          "test_number": 1,
+          "description": "The font programs for all fonts used for rendering within a conforming file shall be embedded within that file, as defined in ISO 32000-1:2008, 9.9",
+          "status": "failed",
+          "failed_checks": 3,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/ucdavis-beamer_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 18994,
+      "failed_checks": 6,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 6,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "metropolis-demo",
+    "tex_path": "benchmarks/beamer/metropolis-demo.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/beamer/metropolis-demo.pdf",
+      "passed_rules": 95,
+      "failed_rules": 11,
+      "passed_checks": 1421,
+      "failed_checks": 1045,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.18.1",
+          "test_number": 2,
+          "description": "An annotation (except Widget annotations or hidden annotations, or those having rectangle outside the crop-box) shall have either Contents key or an Alt entry in the enclosing structure element",
+          "status": "failed",
+          "failed_checks": 18,
+          "tags": [
+            "annotation",
+            "alt-text"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 343,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 2,
+          "description": "Links shall contain an alternate description via their Contents key as described in ISO 32000-1:2008, 14.9.3",
+          "status": "failed",
+          "failed_checks": 18,
+          "tags": [
+            "annotation",
+            "alt-text",
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.18.5",
+          "test_number": 1,
+          "description": "Links shall be tagged according to ISO 32000-1:2008, 14.8.4.4.2, Link Element",
+          "status": "failed",
+          "failed_checks": 18,
+          "tags": [
+            "annotation"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 2,
+          "description": "Natural language in the Outline entries shall be determined",
+          "status": "failed",
+          "failed_checks": 5,
+          "tags": [
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.18.3",
+          "test_number": 1,
+          "description": "Every page on which there is an annotation shall contain in its page dictionary the key Tabs, and its value shall be S",
+          "status": "failed",
+          "failed_checks": 9,
+          "tags": [
+            "page"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 630,
+          "tags": [
+            "artifact"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/metropolis-demo_tagged.pdf",
+      "passed_rules": 106,
+      "failed_rules": 0,
+      "passed_checks": 16854,
+      "failed_checks": 0,
+      "failed_rule_details": [],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/metropolis-demo_tagged_encoded.pdf",
+      "passed_rules": 106,
+      "failed_rules": 0,
+      "passed_checks": 16138,
+      "failed_checks": 0,
+      "failed_rule_details": [],
+      "error": null
+    }
+  },
+  {
+    "name": "duke-cv",
+    "tex_path": "benchmarks/cv/duke-cv.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/cv/duke-cv.pdf",
+      "passed_rules": 98,
+      "failed_rules": 8,
+      "passed_checks": 934,
+      "failed_checks": 269,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 113,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 33,
+          "description": "Natural language for document metadata shall be determined",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata",
+            "lang"
+          ]
+        },
+        {
+          "clause": "5",
+          "test_number": 1,
+          "description": "The PDF/UA version and conformance level of a file shall be specified using the PDF/UA Identification extension schema",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 45,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 106,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/duke-cv_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 9617,
+      "failed_checks": 280,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 280,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/duke-cv_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 9617,
+      "failed_checks": 280,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 280,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "utoledo-math2850",
+    "tex_path": "benchmarks/syllabus/utoledo-math2850.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/syllabus/utoledo-math2850.pdf",
+      "passed_rules": 100,
+      "failed_rules": 6,
+      "passed_checks": 1223,
+      "failed_checks": 579,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 279,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 296,
+          "tags": [
+            "artifact"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/utoledo-math2850_tagged.pdf",
+      "passed_rules": 106,
+      "failed_rules": 0,
+      "passed_checks": 20512,
+      "failed_checks": 0,
+      "failed_rule_details": [],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/utoledo-math2850_tagged_encoded.pdf",
+      "passed_rules": 106,
+      "failed_rules": 0,
+      "passed_checks": 23546,
+      "failed_checks": 0,
+      "failed_rule_details": [],
+      "error": null
+    }
+  },
+  {
+    "name": "duke-exam",
+    "tex_path": "benchmarks/exam/duke-exam.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/exam/duke-exam.pdf",
+      "passed_rules": 97,
+      "failed_rules": 9,
+      "passed_checks": 804,
+      "failed_checks": 418,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 124,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "5",
+          "test_number": 1,
+          "description": "The PDF/UA version and conformance level of a file shall be specified using the PDF/UA Identification extension schema",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 37,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 33,
+          "description": "Natural language for document metadata shall be determined",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata",
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 251,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.21.4.1",
+          "test_number": 1,
+          "description": "The font programs for all fonts used for rendering within a conforming file shall be embedded within that file, as defined in ISO 32000-1:2008, 9.9",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/duke-exam_tagged.pdf",
+      "passed_rules": 104,
+      "failed_rules": 2,
+      "passed_checks": 4606,
+      "failed_checks": 155,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.4.1",
+          "test_number": 1,
+          "description": "The font programs for all fonts used for rendering within a conforming file shall be embedded within that file, as defined in ISO 32000-1:2008, 9.9",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 154,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/duke-exam_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 4607,
+      "failed_checks": 154,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 154,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "bu-cs237-hw",
+    "tex_path": "benchmarks/homework/bu-cs237-hw.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/homework/bu-cs237-hw.pdf",
+      "passed_rules": 99,
+      "failed_rules": 7,
+      "passed_checks": 1023,
+      "failed_checks": 976,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 2,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 495,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 475,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/bu-cs237-hw_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 15571,
+      "failed_checks": 5,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 5,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/bu-cs237-hw_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 15910,
+      "failed_checks": 5,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 5,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "uw-amath586-hw",
+    "tex_path": "benchmarks/homework/uw-amath586-hw.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/homework/uw-amath586-hw.pdf",
+      "passed_rules": 98,
+      "failed_rules": 8,
+      "passed_checks": 1072,
+      "failed_checks": 3280,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 1617,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 1639,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 7,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.21.5",
+          "test_number": 1,
+          "description": "For every font embedded in a conforming file and used for rendering, the glyph width information in the font dictionary and in the embedded font program shall be consistent",
+          "status": "failed",
+          "failed_checks": 13,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/uw-amath586-hw_tagged.pdf",
+      "passed_rules": 104,
+      "failed_rules": 2,
+      "passed_checks": 32169,
+      "failed_checks": 100,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 33,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.21.5",
+          "test_number": 1,
+          "description": "For every font embedded in a conforming file and used for rendering, the glyph width information in the font dictionary and in the embedded font program shall be consistent",
+          "status": "failed",
+          "failed_checks": 67,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/uw-amath586-hw_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 19700,
+      "failed_checks": 31,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 31,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "ucsd-math184a-hw",
+    "tex_path": "benchmarks/homework/ucsd-math184a-hw.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/homework/ucsd-math184a-hw.pdf",
+      "passed_rules": 99,
+      "failed_rules": 7,
+      "passed_checks": 831,
+      "failed_checks": 311,
+      "failed_rule_details": [
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 152,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 3,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 152,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/ucsd-math184a-hw_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 7093,
+      "failed_checks": 3,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 3,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/ucsd-math184a-hw_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 7909,
+      "failed_checks": 2,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 2,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "ucsd-math184a-hw5",
+    "tex_path": "benchmarks/homework/ucsd-math184a-hw5.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/homework/ucsd-math184a-hw5.pdf",
+      "passed_rules": 99,
+      "failed_rules": 7,
+      "passed_checks": 853,
+      "failed_checks": 510,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 252,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 252,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 2,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/ucsd-math184a-hw5_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 8037,
+      "failed_checks": 10,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 10,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/ucsd-math184a-hw5_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 8304,
+      "failed_checks": 7,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 7,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "upenn-cs446-hw",
+    "tex_path": "benchmarks/homework/upenn-cs446-hw.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/homework/upenn-cs446-hw.pdf",
+      "passed_rules": 99,
+      "failed_rules": 7,
+      "passed_checks": 2279,
+      "failed_checks": 2368,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 1182,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 8,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 1174,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/upenn-cs446-hw_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 47855,
+      "failed_checks": 95,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 95,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/upenn-cs446-hw_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 51226,
+      "failed_checks": 77,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 77,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "jdavis-hw-template",
+    "tex_path": "benchmarks/homework/jdavis-hw-template.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/homework/jdavis-hw-template.pdf",
+      "passed_rules": 99,
+      "failed_rules": 7,
+      "passed_checks": 1405,
+      "failed_checks": 2017,
+      "failed_rule_details": [
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 8,
+          "tags": [
+            "font"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 963,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 1042,
+          "tags": [
+            "artifact"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/jdavis-hw-template_tagged.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 20848,
+      "failed_checks": 63,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 63,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/jdavis-hw-template_tagged_encoded.pdf",
+      "passed_rules": 105,
+      "failed_rules": 1,
+      "passed_checks": 21244,
+      "failed_checks": 41,
+      "failed_rule_details": [
+        {
+          "clause": "7.21.7",
+          "test_number": 1,
+          "description": "The Font dictionary of all fonts shall define the map of all used character codes to Unicode values, either via a ToUnicode entry, or other mechanisms as defined in ISO 14289-1, 7.21.7",
+          "status": "failed",
+          "failed_checks": 41,
+          "tags": [
+            "font"
+          ]
+        }
+      ],
+      "error": null
+    }
+  },
+  {
+    "name": "sfsu-csc746-hw",
+    "tex_path": "benchmarks/homework/sfsu-csc746-hw.tex",
+    "original": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/benchmarks/homework/sfsu-csc746-hw.pdf",
+      "passed_rules": 100,
+      "failed_rules": 6,
+      "passed_checks": 1172,
+      "failed_checks": 477,
+      "failed_rule_details": [
+        {
+          "clause": "7.2",
+          "test_number": 34,
+          "description": "Natural language for text in page content shall be determined",
+          "status": "failed",
+          "failed_checks": 217,
+          "tags": [
+            "text",
+            "lang"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 8,
+          "description": "The Catalog dictionary of a conforming file shall contain the Metadata key whose value is a metadata stream as defined in ISO 32000-1:2008, 14.3.2. The metadata stream dictionary shall contain entry Type with value /Metadata and entry Subtype with value /XML",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "metadata"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 3,
+          "description": "Content shall be marked as Artifact or tagged as real content",
+          "status": "failed",
+          "failed_checks": 256,
+          "tags": [
+            "artifact"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 11,
+          "description": "The logical structure of the conforming file shall be described by a structure hierarchy rooted in the StructTreeRoot entry of the document catalog dictionary, as described in ISO 32000-1:2008, 14.7",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "structure"
+          ]
+        },
+        {
+          "clause": "6.2",
+          "test_number": 1,
+          "description": "The document catalog dictionary shall include a MarkInfo dictionary containing an entry, Marked, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        },
+        {
+          "clause": "7.1",
+          "test_number": 10,
+          "description": "The document catalog dictionary shall include a ViewerPreferences dictionary containing a DisplayDocTitle key, whose value shall be true",
+          "status": "failed",
+          "failed_checks": 1,
+          "tags": [
+            "syntax"
+          ]
+        }
+      ],
+      "error": null
+    },
+    "tagged": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/sfsu-csc746-hw_tagged.pdf",
+      "passed_rules": 106,
+      "failed_rules": 0,
+      "passed_checks": 13654,
+      "failed_checks": 0,
+      "failed_rule_details": [],
+      "error": null
+    },
+    "tagged_encoded": {
+      "pdf_path": "/Users/ml8/src/mine/accessible-latex/demos/output/sfsu-csc746-hw_tagged_encoded.pdf",
+      "passed_rules": 106,
+      "failed_rules": 0,
+      "passed_checks": 13446,
+      "failed_checks": 0,
+      "failed_rule_details": [],
+      "error": null
+    }
+  }
+]

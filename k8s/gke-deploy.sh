@@ -29,6 +29,10 @@ cd -
 
 kubectl apply -k k8s/overlays/gcp/
 
+# Force rollout restart because the image tag "latest" doesn't change,
+# so kubectl apply won't trigger a pod update.
+kubectl rollout restart deployment/altex
+
 echo ""
 echo "=== Deploy complete ==="
 echo "  Image: $IMAGE"
