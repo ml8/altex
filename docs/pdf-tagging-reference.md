@@ -56,19 +56,25 @@ Signals that the document contains marked content.
 - `/Alt` — an alternative description.  Used for formulas (raw LaTeX),
   code blocks (source code), and figures (caption).
 
-## Content-stream marking (future)
+## Content-stream marking
 
-To link structure elements to specific content in the PDF page:
+Each BT/ET text block in the PDF content stream is wrapped in BDC/EMC
+marked-content operators with an MCID (Marked Content ID):
 
 ```
 % In the page content stream:
-/H1 << /MCID 0 >> BDC
+/P << /MCID 0 >> BDC
+BT
   ... text-drawing operators ...
+ET
 EMC
 ```
 
-The MCID (Marked Content ID) connects the content region to its
-StructElem via the parent tree.  This is not yet implemented in the PoC.
+The MCID connects the content region to its StructElem via the parent
+tree.  Text blocks that are not matched to a structure element remain
+tagged with a default `/P` tag.
+
+Implemented in `pdf_tagger.py` (`_tag_content_streams`).
 
 ## References
 

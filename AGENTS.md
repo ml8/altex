@@ -83,8 +83,7 @@ web/                       # Flask web interface
 
 docs/                      # Project documentation
 |-- design.md              # Architecture, design decisions, feature status
-|-- pdf-tagging-reference.md  # PDF structure tag types reference
-`-- math-speech-and-alt-document.md  # Phase 4 design plan
+`-- pdf-tagging-reference.md  # PDF structure tag types reference
 
 demos/                     # Demo scripts (run against benchmarks/)
 |-- demo_compare.sh        # Before/after comparison

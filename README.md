@@ -200,8 +200,7 @@ k8s/                   # Kubernetes deployment (see k8s/README.md)
 docs/
 |-- tool-audit.md      # verapdf/PAVE comparison and compliance analysis
 |-- design.md          # Architecture and design decisions
-|-- pdf-tagging-reference.md  # PDF structure tag reference
-`-- math-speech-and-alt-document.md  # Phase 4 design plan
+`-- pdf-tagging-reference.md  # PDF structure tag reference
 demos/
 |-- demo_compare.sh    # Before/after comparison with encoding variant
 |-- demo_math_alttext.sh  # Math formula alt-text showcase
