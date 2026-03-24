@@ -203,7 +203,7 @@ docs/
 `-- pdf-tagging-reference.md  # PDF structure tag reference
 demos/
 |-- demo_compare.sh    # Before/after comparison with encoding variant
-|-- demo_math_alttext.sh  # Math formula alt-text showcase
+|-- demo_math_alttext.sh  # Math formula alt-text demo
 |-- demo_math_speech.sh   # Math-to-speech engine comparison
 |-- demo_alt_document.sh  # Embedded alternative HTML demo
 `-- demo_tag_all.sh    # Batch-tag all test documents

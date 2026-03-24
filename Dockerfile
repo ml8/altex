@@ -48,9 +48,6 @@ COPY benchmarks/ benchmarks/
 # Set ownership of /app to appuser.
 RUN chown -R appuser:appuser /app
 
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
-USER appuser
-
 ENV FLASK_APP=web.app
 ENV ALTEX_STORAGE=inline
 EXPOSE 5000
