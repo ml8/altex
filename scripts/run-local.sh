@@ -16,5 +16,5 @@ fi
 source .venv/bin/activate
 pip install -q -r requirements.txt flask
 
-echo "Starting altex web service on http://localhost:5000"
+echo "Starting altex web service on http://localhost:5001"
 FLASK_APP=web.app flask run --host=0.0.0.0 --port=5001
