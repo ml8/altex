@@ -148,11 +148,19 @@ def strip_delimiters(latex: str) -> str:
     if s.startswith("\\[") and s.endswith("\\]"):
         return s[2:-2].strip()
     # Strip \begin{env}...\end{env}
-    for env in ("equation", "equation*", "align", "align*",
-                "gather", "gather*", "multline", "multline*",
-                "displaymath"):
+    for env in (
+        "equation",
+        "equation*",
+        "align",
+        "align*",
+        "gather",
+        "gather*",
+        "multline",
+        "multline*",
+        "displaymath",
+    ):
         begin = f"\\begin{{{env}}}"
         end = f"\\end{{{env}}}"
         if s.startswith(begin) and s.endswith(end):
-            return s[len(begin):-len(end)].strip()
+            return s[len(begin) : -len(end)].strip()
     return s

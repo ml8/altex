@@ -46,22 +46,37 @@ _SECTION_MACROS: dict[str, int] = {
     "paragraph": 3,
 }
 
-_MATH_ENVIRONMENTS = frozenset({
-    "equation", "equation*",
-    "align", "align*",
-    "gather", "gather*",
-    "multline", "multline*",
-    "flalign", "flalign*",
-    "displaymath",
-})
+_MATH_ENVIRONMENTS = frozenset(
+    {
+        "equation",
+        "equation*",
+        "align",
+        "align*",
+        "gather",
+        "gather*",
+        "multline",
+        "multline*",
+        "flalign",
+        "flalign*",
+        "displaymath",
+    }
+)
 
-_CODE_ENVIRONMENTS = frozenset({
-    "verbatim", "lstlisting", "minted",
-})
+_CODE_ENVIRONMENTS = frozenset(
+    {
+        "verbatim",
+        "lstlisting",
+        "minted",
+    }
+)
 
-_LIST_ENVIRONMENTS = frozenset({
-    "itemize", "enumerate", "description",
-})
+_LIST_ENVIRONMENTS = frozenset(
+    {
+        "itemize",
+        "enumerate",
+        "description",
+    }
+)
 
 _l2t = LatexNodes2Text()
 
@@ -295,7 +310,7 @@ def _node_to_text(node) -> str:
     """Best-effort plain-text extraction from a single node."""
     try:
         raw = node.latex_verbatim()
-        return _l2t.latex_to_text(raw)
+        return _l2t.latex_to_text(raw)  # type: ignore[no-any-return]
     except Exception:
         return ""
 
@@ -385,10 +400,7 @@ def _normalize_headings(root: DocumentNode) -> None:
 
     # Build remap: used levels → compact H1..Hn sequence.
     sorted_used = sorted(used, key=lambda t: _HEADING_TAGS_ORDERED.index(t))
-    remap = {
-        old: _HEADING_TAGS_ORDERED[i]
-        for i, old in enumerate(sorted_used)
-    }
+    remap = {old: _HEADING_TAGS_ORDERED[i] for i, old in enumerate(sorted_used)}
 
     # Only apply if there's actually a change needed.
     if any(k != v for k, v in remap.items()):
@@ -420,7 +432,8 @@ def _prune_empty_headings(node: DocumentNode) -> None:
     """
     heading_tags = set(_HEADING_TAGS_ORDERED)
     node.children = [
-        child for child in node.children
+        child
+        for child in node.children
         if not (
             child.tag == Tag.SECTION
             and len(child.children) == 1

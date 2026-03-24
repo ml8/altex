@@ -3,9 +3,11 @@
 Provides common fixtures for LaTeX parsing, DocumentNode creation, and sample content.
 """
 
+from __future__ import annotations
+
 import tempfile
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
 
 import pytest
 
@@ -137,26 +139,26 @@ def sample_nested_lists_latex(temp_dir: Path) -> Path:
 def sample_document_tree() -> DocumentNode:
     """Create a sample DocumentNode tree for testing."""
     doc = DocumentNode(Tag.DOCUMENT)
-    
+
     section1 = DocumentNode(Tag.SECTION, text="Section 1")
     h1 = DocumentNode(Tag.HEADING1, text="Introduction")
     section1.children.append(h1)
-    
+
     para1 = DocumentNode(Tag.PARAGRAPH, text="This is a paragraph.")
     section1.children.append(para1)
-    
+
     doc.children.append(section1)
-    
+
     section2 = DocumentNode(Tag.SECTION, text="Section 2")
     h2 = DocumentNode(Tag.HEADING1, text="Methods")
     section2.children.append(h2)
-    
+
     lst = DocumentNode(Tag.LIST)
     li1 = DocumentNode(Tag.LIST_ITEM, text="Item 1")
     li2 = DocumentNode(Tag.LIST_ITEM, text="Item 2")
     lst.children.extend([li1, li2])
     section2.children.append(lst)
-    
+
     doc.children.append(section2)
-    
+
     return doc

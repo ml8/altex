@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import subprocess
 import sys
 from dataclasses import asdict, dataclass, field
@@ -30,7 +29,10 @@ OUTPUT_DIR = ROOT / "demos" / "output"
 BENCHMARK_PAIRS = [
     # Papers and lecture notes
     ("benchmarks/paper/wm-thesis.tex", "benchmarks/paper/wm-thesis.pdf"),
-    ("benchmarks/paper/cambridge-dist-sys.tex", "benchmarks/paper/cambridge-dist-sys.pdf"),
+    (
+        "benchmarks/paper/cambridge-dist-sys.tex",
+        "benchmarks/paper/cambridge-dist-sys.pdf",
+    ),
     ("benchmarks/paper/elegantpaper-en.tex", "benchmarks/paper/elegantpaper-en.pdf"),
     # Beamer presentations
     ("benchmarks/beamer/tufts-beamer.tex", "benchmarks/beamer/tufts-beamer.pdf"),
@@ -39,16 +41,37 @@ BENCHMARK_PAIRS = [
     ("benchmarks/beamer/metropolis-demo.tex", "benchmarks/beamer/metropolis-demo.pdf"),
     # CV, syllabus, exam
     ("benchmarks/cv/duke-cv.tex", "benchmarks/cv/duke-cv.pdf"),
-    ("benchmarks/syllabus/utoledo-math2850.tex", "benchmarks/syllabus/utoledo-math2850.pdf"),
+    (
+        "benchmarks/syllabus/utoledo-math2850.tex",
+        "benchmarks/syllabus/utoledo-math2850.pdf",
+    ),
     ("benchmarks/exam/duke-exam.tex", "benchmarks/exam/duke-exam.pdf"),
     # Homework assignments (probability, numerical methods, ML, combinatorics, HPC)
     ("benchmarks/homework/bu-cs237-hw.tex", "benchmarks/homework/bu-cs237-hw.pdf"),
-    ("benchmarks/homework/uw-amath586-hw.tex", "benchmarks/homework/uw-amath586-hw.pdf"),
-    ("benchmarks/homework/ucsd-math184a-hw.tex", "benchmarks/homework/ucsd-math184a-hw.pdf"),
-    ("benchmarks/homework/ucsd-math184a-hw5.tex", "benchmarks/homework/ucsd-math184a-hw5.pdf"),
-    ("benchmarks/homework/upenn-cs446-hw.tex", "benchmarks/homework/upenn-cs446-hw.pdf"),
-    ("benchmarks/homework/jdavis-hw-template.tex", "benchmarks/homework/jdavis-hw-template.pdf"),
-    ("benchmarks/homework/sfsu-csc746-hw.tex", "benchmarks/homework/sfsu-csc746-hw.pdf"),
+    (
+        "benchmarks/homework/uw-amath586-hw.tex",
+        "benchmarks/homework/uw-amath586-hw.pdf",
+    ),
+    (
+        "benchmarks/homework/ucsd-math184a-hw.tex",
+        "benchmarks/homework/ucsd-math184a-hw.pdf",
+    ),
+    (
+        "benchmarks/homework/ucsd-math184a-hw5.tex",
+        "benchmarks/homework/ucsd-math184a-hw5.pdf",
+    ),
+    (
+        "benchmarks/homework/upenn-cs446-hw.tex",
+        "benchmarks/homework/upenn-cs446-hw.pdf",
+    ),
+    (
+        "benchmarks/homework/jdavis-hw-template.tex",
+        "benchmarks/homework/jdavis-hw-template.pdf",
+    ),
+    (
+        "benchmarks/homework/sfsu-csc746-hw.tex",
+        "benchmarks/homework/sfsu-csc746-hw.pdf",
+    ),
 ]
 
 
@@ -85,7 +108,9 @@ class DocumentBenchmark:
 def run_verapdf(pdf_path: Path) -> ValidationResult:
     """Run verapdf -f ua1 on a PDF and parse JSON output."""
     if not pdf_path.exists():
-        return ValidationResult(pdf_path=str(pdf_path), error=f"File not found: {pdf_path}")
+        return ValidationResult(
+            pdf_path=str(pdf_path), error=f"File not found: {pdf_path}"
+        )
 
     try:
         result = subprocess.run(
@@ -95,9 +120,13 @@ def run_verapdf(pdf_path: Path) -> ValidationResult:
             timeout=120,
         )
     except FileNotFoundError:
-        return ValidationResult(pdf_path=str(pdf_path), error="verapdf not found in PATH")
+        return ValidationResult(
+            pdf_path=str(pdf_path), error="verapdf not found in PATH"
+        )
     except subprocess.TimeoutExpired:
-        return ValidationResult(pdf_path=str(pdf_path), error="verapdf timed out after 120s")
+        return ValidationResult(
+            pdf_path=str(pdf_path), error="verapdf timed out after 120s"
+        )
 
     try:
         data = json.loads(result.stdout)
@@ -107,14 +136,16 @@ def run_verapdf(pdf_path: Path) -> ValidationResult:
         failed_details = []
         for rs in vr.get("ruleSummaries", []):
             if rs["ruleStatus"] == "FAILED":
-                failed_details.append(RuleResult(
-                    clause=rs["clause"],
-                    test_number=rs["testNumber"],
-                    description=rs["description"],
-                    status="failed",
-                    failed_checks=rs["failedChecks"],
-                    tags=rs.get("tags", []),
-                ))
+                failed_details.append(
+                    RuleResult(
+                        clause=rs["clause"],
+                        test_number=rs["testNumber"],
+                        description=rs["description"],
+                        status="failed",
+                        failed_checks=rs["failedChecks"],
+                        tags=rs.get("tags", []),
+                    )
+                )
 
         return ValidationResult(
             pdf_path=str(pdf_path),
@@ -128,13 +159,25 @@ def run_verapdf(pdf_path: Path) -> ValidationResult:
         return ValidationResult(pdf_path=str(pdf_path), error=f"Parse error: {e}")
 
 
-def run_altex(tex_path: Path, pdf_path: Path, output: Path, fix_encoding: bool = True) -> bool:
+def run_altex(
+    tex_path: Path, pdf_path: Path, output: Path, fix_encoding: bool = True
+) -> bool:
     """Run altex pipeline on a single document."""
-    cmd = [sys.executable, "-m", "altex", str(tex_path), str(pdf_path), "-o", str(output)]
+    cmd = [
+        sys.executable,
+        "-m",
+        "altex",
+        str(tex_path),
+        str(pdf_path),
+        "-o",
+        str(output),
+    ]
     if not fix_encoding:
         cmd.append("--no-fix-encoding")
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=str(ROOT))
+        result = subprocess.run(
+            cmd, capture_output=True, text=True, timeout=120, cwd=str(ROOT)
+        )
         if result.returncode != 0:
             print(f"  ALTEX ERROR: {result.stderr.strip()}", file=sys.stderr)
             return False
@@ -149,7 +192,9 @@ def run_benchmarks(tag_first: bool = False) -> list[DocumentBenchmark]:
     return _run_pairs(BENCHMARK_PAIRS, tag_first)
 
 
-def _run_pairs(pairs: list[tuple[str, str]], tag_first: bool) -> list[DocumentBenchmark]:
+def _run_pairs(
+    pairs: list[tuple[str, str]], tag_first: bool
+) -> list[DocumentBenchmark]:
     """Run benchmarks for a list of (tex, pdf) pairs."""
     results = []
 
@@ -236,12 +281,16 @@ def format_report(benchmarks: list[DocumentBenchmark]) -> str:
             total_tag_check += b.tagged.passed_checks + b.tagged.failed_checks
         if b.tagged_encoded and not b.tagged_encoded.error:
             total_enc_fail += b.tagged_encoded.failed_checks
-            total_enc_check += b.tagged_encoded.passed_checks + b.tagged_encoded.failed_checks
+            total_enc_check += (
+                b.tagged_encoded.passed_checks + b.tagged_encoded.failed_checks
+            )
 
     lines.append("-" * 72)
-    lines.append(f"  {'TOTAL':<23} {total_orig_fail}/{total_orig_check:>5}      "
-                 f"{total_tag_fail}/{total_tag_check:>5}      "
-                 f"{total_enc_fail}/{total_enc_check:>5}")
+    lines.append(
+        f"  {'TOTAL':<23} {total_orig_fail}/{total_orig_check:>5}      "
+        f"{total_tag_fail}/{total_tag_check:>5}      "
+        f"{total_enc_fail}/{total_enc_check:>5}"
+    )
     lines.append("")
 
     # Rules fixed by altex
@@ -269,16 +318,24 @@ def format_report(benchmarks: list[DocumentBenchmark]) -> str:
         lines.append(f"\n  {b.name}")
         lines.append(f"  {'─' * 40}")
 
-        for label, vr in [("Original", b.original), ("Tagged", b.tagged), ("Encoded", b.tagged_encoded)]:
+        for label, vr in [
+            ("Original", b.original),
+            ("Tagged", b.tagged),
+            ("Encoded", b.tagged_encoded),
+        ]:
             if vr is None:
                 continue
             if vr.error:
                 lines.append(f"    {label}: ERROR — {vr.error}")
                 continue
-            lines.append(f"    {label}: {vr.passed_rules} passed, {vr.failed_rules} failed "
-                         f"({vr.failed_checks} check failures)")
+            lines.append(
+                f"    {label}: {vr.passed_rules} passed, {vr.failed_rules} failed "
+                f"({vr.failed_checks} check failures)"
+            )
             for rd in vr.failed_rule_details:
-                lines.append(f"      [{rd.clause}:{rd.test_number}] ×{rd.failed_checks} — {rd.description[:60]}")
+                lines.append(
+                    f"      [{rd.clause}:{rd.test_number}] ×{rd.failed_checks} — {rd.description[:60]}"
+                )
 
     lines.append("")
     return "\n".join(lines)
@@ -296,7 +353,9 @@ def _fmt_ratio(vr: ValidationResult | None) -> str:
 def _compute_rule_deltas(benchmarks: list[DocumentBenchmark]) -> tuple[dict, dict]:
     """Compute which rules altex fixes and which remain."""
     orig_rules: dict[str, str] = {}  # clause → description
-    post_rules: dict[str, tuple[str, dict[str, int]]] = {}  # clause → (desc, {doc: count})
+    post_rules: dict[str, tuple[str, dict[str, int]]] = (
+        {}
+    )  # clause → (desc, {doc: count})
 
     for b in benchmarks:
         if b.original and not b.original.error:
@@ -323,26 +382,38 @@ def _compute_rule_deltas(benchmarks: list[DocumentBenchmark]) -> tuple[dict, dic
 
 def main():
     parser = argparse.ArgumentParser(description="altex PDF/UA benchmark suite")
-    parser.add_argument("--tag-first", action="store_true",
-                        help="Run altex pipeline before validating (regenerates tagged PDFs)")
-    parser.add_argument("--output-json", type=Path,
-                        help="Write raw results as JSON to this path")
-    parser.add_argument("--fail-on-regression", type=Path,
-                        help="Fail if results are worse than this baseline JSON file")
+    parser.add_argument(
+        "--tag-first",
+        action="store_true",
+        help="Run altex pipeline before validating (regenerates tagged PDFs)",
+    )
+    parser.add_argument(
+        "--output-json", type=Path, help="Write raw results as JSON to this path"
+    )
+    parser.add_argument(
+        "--fail-on-regression",
+        type=Path,
+        help="Fail if results are worse than this baseline JSON file",
+    )
     args = parser.parse_args()
 
     # Check verapdf
     try:
         subprocess.run(["verapdf", "--version"], capture_output=True, timeout=10)
     except FileNotFoundError:
-        print("ERROR: verapdf not found in PATH. Install from https://verapdf.org/software/", file=sys.stderr)
+        print(
+            "ERROR: verapdf not found in PATH. Install from https://verapdf.org/software/",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     print("Running PDF/UA-1 benchmarks...\n")
     benchmarks = run_benchmarks(tag_first=args.tag_first)
 
     if not benchmarks:
-        print("No test PDFs found. Ensure benchmarks/ directory exists.", file=sys.stderr)
+        print(
+            "No test PDFs found. Ensure benchmarks/ directory exists.", file=sys.stderr
+        )
         sys.exit(1)
 
     # Print report
@@ -362,25 +433,27 @@ def main():
         try:
             with open(args.fail_on_regression) as f:
                 baseline_data = json.load(f)
-            
+
             # Map baseline by document name -> failed_checks count
             baseline_map = {}
             for entry in baseline_data:
                 # Handle both list of dicts (new format) and whatever format might exist
                 # We expect the same structure as we dump above
                 name = entry.get("name")
-                
+
                 # We care about the final result (encoded or tagged)
                 # entry is a dict corresponding to DocumentBenchmark dataclass
                 # "tagged_encoded" -> "failed_checks"
-                
+
                 # Get the best result from baseline
                 best_fail = None
-                if entry.get("tagged_encoded") and not entry["tagged_encoded"].get("error"):
+                if entry.get("tagged_encoded") and not entry["tagged_encoded"].get(
+                    "error"
+                ):
                     best_fail = entry["tagged_encoded"]["failed_checks"]
                 elif entry.get("tagged") and not entry["tagged"].get("error"):
                     best_fail = entry["tagged"]["failed_checks"]
-                
+
                 if name and best_fail is not None:
                     baseline_map[name] = best_fail
 
@@ -392,15 +465,17 @@ def main():
                     curr_fail = b.tagged_encoded.failed_checks
                 elif b.tagged and not b.tagged.error:
                     curr_fail = b.tagged.failed_checks
-                
+
                 if curr_fail is None:
-                    continue # Skip if current run failed completely (already reported as error)
+                    continue  # Skip if current run failed completely (already reported as error)
 
                 base_fail = baseline_map.get(b.name)
                 if base_fail is not None:
                     if curr_fail > base_fail:
-                        regressions.append(f"{b.name}: {curr_fail} failures (baseline: {base_fail})")
-            
+                        regressions.append(
+                            f"{b.name}: {curr_fail} failures (baseline: {base_fail})"
+                        )
+
             if regressions:
                 print("\nREGRESSION DETECTED:")
                 for reg in regressions:
@@ -408,7 +483,7 @@ def main():
                 sys.exit(1)
             else:
                 print("\n✅ No regressions detected against baseline.")
-                
+
         except Exception as e:
             print(f"ERROR checking regression: {e}", file=sys.stderr)
             sys.exit(1)

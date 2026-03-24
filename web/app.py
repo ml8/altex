@@ -20,17 +20,16 @@ The /api/tag endpoint returns a JSON summary that includes:
 from __future__ import annotations
 
 import base64
+import json
 import os
 import shutil
 import tempfile
 import uuid
 from pathlib import Path
-import subprocess
 
 import pikepdf
 import structlog
-from flask import Flask, jsonify, request, send_file, Response, stream_with_context
-import json
+from flask import Flask, Response, jsonify, request, send_file, stream_with_context
 from werkzeug.utils import secure_filename
 
 from altex.latex_parser import extract_title, parse
@@ -41,7 +40,7 @@ from altex.verapdf import validate as validate_pdfua
 structlog.configure(
     processors=[
         structlog.processors.TimeStamper(fmt="iso"),
-        structlog.processors.JSONRenderer()
+        structlog.processors.JSONRenderer(),
     ],
     context_class=dict,
     logger_factory=structlog.PrintLoggerFactory(),
@@ -70,17 +69,13 @@ def index():
 @app.route("/healthz")
 def healthz():
     """Health check for Kubernetes liveness/readiness probes."""
-    checks = {
-        "verapdf": False,
-        "gs": False,
-        "temp_writable": False
-    }
+    checks = {"verapdf": False, "gs": False, "temp_writable": False}
 
     # Check dependencies
     try:
         # verapdf might not support --version in all versions, but let's try or check path
         if shutil.which("verapdf"):
-             checks["verapdf"] = True
+            checks["verapdf"] = True
     except Exception:
         pass
 
@@ -97,13 +92,13 @@ def healthz():
             checks["temp_writable"] = True
     except Exception:
         pass
-    
-    # We consider the app healthy if temp is writable. 
+
+    # We consider the app healthy if temp is writable.
     # Dependencies might be missing in dev environments, but are critical for full function.
     # In strict production, missing deps should fail healthz.
     healthy = all(checks.values())
     status_code = 200 if healthy else 503
-    
+
     return jsonify(status="ok" if healthy else "unhealthy", checks=checks), status_code
 
 
@@ -128,28 +123,40 @@ def api_tag():
             # Sanitize filenames to prevent path traversal attacks.
             tex_filename = secure_filename(tex_file.filename)
             pdf_filename = secure_filename(pdf_file.filename)
-            
+
             if not tex_filename or not pdf_filename:
-                yield json.dumps({"type": "error", "msg": "Invalid or missing filenames."}) + "\n"
+                yield json.dumps(
+                    {"type": "error", "msg": "Invalid or missing filenames."}
+                ) + "\n"
                 return
-            
+
             tex_path = work / tex_filename
             pdf_path = work / pdf_filename
-            
-            logger.info("job_started", job_id=work.name, tex=tex_filename, pdf=pdf_filename)
-            
+
+            logger.info(
+                "job_started", job_id=work.name, tex=tex_filename, pdf=pdf_filename
+            )
+
             tex_file.save(tex_path)
             pdf_file.save(pdf_path)
 
             # Run verapdf on the ORIGINAL PDF (before tagging).
-            yield json.dumps({"type": "progress", "msg": "Validating original PDF..."}) + "\n"
+            yield json.dumps(
+                {"type": "progress", "msg": "Validating original PDF..."}
+            ) + "\n"
             validation_before = validate_pdfua(pdf_path)
 
             # Optional Ghostscript encoding fix (on by default).
             if fix_encoding:
                 try:
-                    yield json.dumps({"type": "progress", "msg": "Fixing font encoding (Ghostscript)..."}) + "\n"
+                    yield json.dumps(
+                        {
+                            "type": "progress",
+                            "msg": "Fixing font encoding (Ghostscript)...",
+                        }
+                    ) + "\n"
                     from altex.encoding_fixer import fix_encoding as gs_fix
+
                     gs_out = work / "gs_encoded.pdf"
                     gs_fix(pdf_path, gs_out)
                     pdf_path = gs_out
@@ -157,20 +164,27 @@ def api_tag():
                     pass  # Graceful fallback if gs not available.
 
             # Run the pipeline.
-            yield json.dumps({"type": "progress", "msg": "Parsing LaTeX structure..."}) + "\n"
+            yield json.dumps(
+                {"type": "progress", "msg": "Parsing LaTeX structure..."}
+            ) + "\n"
             tree = parse(tex_path)
             title = extract_title(tex_path) or tex_path.stem
 
             # Generate alt HTML from raw tree (before speech conversion).
             alt_html = None
             if embed_alt:
-                yield json.dumps({"type": "progress", "msg": "Generating alternative HTML..."}) + "\n"
+                yield json.dumps(
+                    {"type": "progress", "msg": "Generating alternative HTML..."}
+                ) + "\n"
                 from altex.alt_document import generate_alt_html
+
                 alt_html = generate_alt_html(tree, title)
 
             # Optional math-to-speech conversion.
             if math_speech != "none":
-                yield json.dumps({"type": "progress", "msg": "Converting math to speech..."}) + "\n"
+                yield json.dumps(
+                    {"type": "progress", "msg": "Converting math to speech..."}
+                ) + "\n"
                 from altex.math_speech import latex_to_speech
                 from altex.models import Tag
 
@@ -179,22 +193,29 @@ def api_tag():
                     speeches = latex_to_speech(
                         [n.text for n in formula_nodes], engine=math_speech
                     )
-                    for node, speech in zip(formula_nodes, speeches):
+                    for node, speech in zip(formula_nodes, speeches, strict=False):
                         node.text = speech
 
             # Write tagged PDF.
-            yield json.dumps({"type": "progress", "msg": "Tagging PDF structure..."}) + "\n"
+            yield json.dumps(
+                {"type": "progress", "msg": "Tagging PDF structure..."}
+            ) + "\n"
             out_path = work / "tagged.pdf"
             tag(pdf_path, tree, out_path, lang=lang, title=title)
 
             # Embed alternative HTML.
             if alt_html:
-                yield json.dumps({"type": "progress", "msg": "Embedding alternative document..."}) + "\n"
+                yield json.dumps(
+                    {"type": "progress", "msg": "Embedding alternative document..."}
+                ) + "\n"
                 from altex.alt_document import embed_alt_document
+
                 embed_alt_document(out_path, alt_html, out_path)
 
             # Run verapdf on the TAGGED PDF (after tagging).
-            yield json.dumps({"type": "progress", "msg": "Validating tagged PDF..."}) + "\n"
+            yield json.dumps(
+                {"type": "progress", "msg": "Validating tagged PDF..."}
+            ) + "\n"
             validation_after = validate_pdfua(out_path)
 
             summary = _summarize(out_path, tree)
@@ -209,7 +230,7 @@ def api_tag():
             else:
                 # Local: store on filesystem, return download URL.
                 result_id = uuid.uuid4().hex[:12]
-                final_path = _RESULTS_DIR / f"{result_id}.pdf"
+                final_path = _RESULTS_DIR / f"{result_id}.pdf"  # type: ignore[operator]
                 shutil.copy2(out_path, final_path)
                 summary["id"] = result_id
                 summary["download_url"] = f"/api/download/{result_id}"
@@ -223,7 +244,7 @@ def api_tag():
         finally:
             shutil.rmtree(work, ignore_errors=True)
 
-    return Response(stream_with_context(generate()), mimetype='application/x-ndjson')
+    return Response(stream_with_context(generate()), mimetype="application/x-ndjson")
 
 
 @app.route("/api/download/<result_id>")
@@ -234,8 +255,9 @@ def api_download(result_id: str):
     path = _RESULTS_DIR / f"{result_id}.pdf"
     if not path.is_file():
         return jsonify(error="Result not found or expired."), 404
-    return send_file(path, mimetype="application/pdf", as_attachment=True,
-                     download_name="tagged.pdf")
+    return send_file(  # type: ignore[call-arg]
+        path, mimetype="application/pdf", as_attachment=True, download_name="tagged.pdf"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -277,7 +299,7 @@ def _summarize(pdf_path: Path, tree) -> dict:
 
     return {
         "title": title,
-        "lang": str(pdf.Root.get("/Lang", "")),
+        "lang": str(pdf.Root.get("/Lang", "")),  # type: ignore[call-overload]
         "pages": len(pdf.pages),
         "elements": elements,
         "alt_count": alt_count,
@@ -290,4 +312,3 @@ def _summarize(pdf_path: Path, tree) -> dict:
 # ---------------------------------------------------------------------------
 # verapdf validation
 # ---------------------------------------------------------------------------
-

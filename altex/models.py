@@ -8,9 +8,14 @@ the *only* shared data structure between the two stages.
 from __future__ import annotations
 
 import json
+import sys
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Self
+
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 
 class Tag(Enum):
@@ -33,10 +38,10 @@ class Tag(Enum):
 
 # Map LaTeX sectioning depth to heading tag.
 HEADING_TAGS = {
-    0: Tag.HEADING1,   # \section  or \chapter in report/book
-    1: Tag.HEADING2,   # \subsection
-    2: Tag.HEADING3,   # \subsubsection
-    3: Tag.HEADING4,   # \paragraph
+    0: Tag.HEADING1,  # \section  or \chapter in report/book
+    1: Tag.HEADING2,  # \subsection
+    2: Tag.HEADING3,  # \subsubsection
+    3: Tag.HEADING4,  # \paragraph
 }
 
 

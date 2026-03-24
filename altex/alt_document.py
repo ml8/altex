@@ -57,7 +57,7 @@ def embed_alt_document(
     """Embed *html* as an alternative document attachment in the PDF."""
     pdf = pikepdf.open(pdf_path, allow_overwriting_input=True)
 
-    filespec = pikepdf.AttachedFileSpec(
+    filespec = pikepdf.AttachedFileSpec(  # type: ignore[call-arg]
         pdf,
         data=html.encode("utf-8"),
         description="Accessible HTML alternative of this document",
@@ -88,7 +88,7 @@ def _render(node: DocumentNode) -> str:
 
     if node.tag == Tag.FIGURE:
         caption = escape(node.text) if node.text else "Figure"
-        return f'<figure><figcaption>{caption}</figcaption></figure>\n'
+        return f"<figure><figcaption>{caption}</figcaption></figure>\n"
 
     if node.tag == Tag.CODE:
         return f"<pre><code>{escape(node.text)}</code></pre>\n"
@@ -98,7 +98,11 @@ def _render(node: DocumentNode) -> str:
         return f"<ul>\n{items}\n</ul>\n"
 
     if node.tag == Tag.LIST_ITEM:
-        inner = " ".join(_render(c) for c in node.children) if node.children else escape(node.text)
+        inner = (
+            " ".join(_render(c) for c in node.children)
+            if node.children
+            else escape(node.text)
+        )
         return f"<li>{inner}</li>"
 
     html_tag = _HTML_MAP.get(node.tag, "span")
@@ -113,7 +117,9 @@ def _render_formula(node: DocumentNode) -> str:
     text = node.text or ""
     try:
         import latex2mathml.converter as l2m
+
         from altex.math_speech import strip_delimiters
+
         clean = strip_delimiters(text)
         mathml = l2m.convert(clean)
         return f'<span role="math" aria-label="{escape(text)}">{mathml}</span>'

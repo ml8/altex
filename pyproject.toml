@@ -56,7 +56,7 @@ select = [
 ]
 ignore = [
     "E501",   # line too long (handled by black)
-    "W503",   # line break before binary operator
+    "C901",   # function too complex (dispatch functions are inherently branchy)
 ]
 
 [tool.ruff.lint.isort]
@@ -88,3 +88,16 @@ no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pylatexenc.*",
+    "fitz",
+    "fitz.*",
+    "latex2mathml.*",
+    "structlog",
+    "structlog.*",
+    "pytest",
+    "pytest.*",
+]
+ignore_missing_imports = true

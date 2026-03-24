@@ -99,7 +99,7 @@ def _apply_math_speech(tree: DocumentNode, engine: str) -> None:
 
     raw_texts = [n.text for n in formula_nodes]
     speeches = latex_to_speech(raw_texts, engine=engine)
-    for node, speech in zip(formula_nodes, speeches):
+    for node, speech in zip(formula_nodes, speeches, strict=False):
         node.text = speech
 
 

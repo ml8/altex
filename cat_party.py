@@ -11,14 +11,16 @@ Usage:
     python3 cat_party.py --list       # list all available parties
 """
 
+from __future__ import annotations
+
 import argparse
 import sys
 import time
 from pathlib import Path
 
-CHAR_DELAY = 0.015       # seconds between characters
-FAST_DELAY = 0.003       # faster for whitespace-heavy lines
-LINE_DELAY = 0.05        # pause between lines
+CHAR_DELAY = 0.015  # seconds between characters
+FAST_DELAY = 0.003  # faster for whitespace-heavy lines
+LINE_DELAY = 0.05  # pause between lines
 PAUSE_MARKER = "---PAUSE---"
 PARTIES_DIR = Path(__file__).parent / "parties"
 
@@ -62,11 +64,16 @@ def display(party_file: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Cat party viewer.")
     parser.add_argument(
-        "--rewind", type=int, default=0, metavar="N",
+        "--rewind",
+        type=int,
+        default=0,
+        metavar="N",
         help="Go back N parties (0 = latest, 1 = previous, etc.)",
     )
     parser.add_argument(
-        "--list", action="store_true", dest="list_parties",
+        "--list",
+        action="store_true",
+        dest="list_parties",
         help="List all available parties and exit",
     )
     args = parser.parse_args()

@@ -53,11 +53,13 @@ def validate(pdf_path: Path, *, timeout: int = 60) -> dict | None:
         failed_details = []
         for rs in vr.get("ruleSummaries", []):
             if rs["ruleStatus"] == "FAILED":
-                failed_details.append({
-                    "clause": f"{rs['clause']}:{rs['testNumber']}",
-                    "description": rs["description"],
-                    "count": rs["failedChecks"],
-                })
+                failed_details.append(
+                    {
+                        "clause": f"{rs['clause']}:{rs['testNumber']}",
+                        "description": rs["description"],
+                        "count": rs["failedChecks"],
+                    }
+                )
 
         return {
             "passed_rules": vr["passedRules"],

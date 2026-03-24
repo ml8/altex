@@ -3,9 +3,9 @@
 Tests the DocumentNode data structure and Tag enum.
 """
 
-import json
+from __future__ import annotations
 
-import pytest
+import json
 
 from altex.models import HEADING_TAGS, DocumentNode, Tag
 
@@ -16,9 +16,19 @@ class TestTag:
     def test_all_tags_defined(self):
         """Verify all expected PDF structure tags are defined."""
         expected = {
-            "DOCUMENT", "SECTION", "HEADING1", "HEADING2",
-            "HEADING3", "HEADING4", "PARAGRAPH", "LIST",
-            "LIST_ITEM", "FORMULA", "CODE", "FIGURE", "LINK"
+            "DOCUMENT",
+            "SECTION",
+            "HEADING1",
+            "HEADING2",
+            "HEADING3",
+            "HEADING4",
+            "PARAGRAPH",
+            "LIST",
+            "LIST_ITEM",
+            "FORMULA",
+            "CODE",
+            "FIGURE",
+            "LINK",
         }
         actual = {member.name for member in Tag}
         assert actual == expected
@@ -69,7 +79,7 @@ class TestDocumentNode:
         child1 = DocumentNode(Tag.LIST_ITEM, text="Item 1")
         child2 = DocumentNode(Tag.LIST_ITEM, text="Item 2")
         parent = DocumentNode(Tag.LIST, children=[child1, child2])
-        
+
         assert parent.tag == Tag.LIST
         assert len(parent.children) == 2
         assert parent.children[0].text == "Item 1"
@@ -79,7 +89,7 @@ class TestDocumentNode:
         """Test to_dict on a leaf node."""
         node = DocumentNode(Tag.PARAGRAPH, text="Hello")
         d = node.to_dict()
-        
+
         assert d["tag"] == "P"
         assert d["text"] == "Hello"
         assert "children" not in d
@@ -89,7 +99,7 @@ class TestDocumentNode:
         child1 = DocumentNode(Tag.LIST_ITEM, text="Item 1")
         child2 = DocumentNode(Tag.LIST_ITEM, text="Item 2")
         parent = DocumentNode(Tag.LIST, children=[child1, child2])
-        
+
         d = parent.to_dict()
         assert d["tag"] == "L"
         assert "text" not in d  # No text, so not included
@@ -101,7 +111,7 @@ class TestDocumentNode:
         """Test to_json serialization."""
         node = DocumentNode(Tag.PARAGRAPH, text="Test")
         json_str = node.to_json()
-        
+
         # Parse it back to verify it's valid JSON
         d = json.loads(json_str)
         assert d["tag"] == "P"
@@ -113,11 +123,11 @@ class TestDocumentNode:
             "tag": "Document",
             "children": [
                 {"tag": "H1", "text": "Title"},
-                {"tag": "P", "text": "Paragraph"}
-            ]
+                {"tag": "P", "text": "Paragraph"},
+            ],
         }
         node = DocumentNode.from_dict(d)
-        
+
         assert node.tag == Tag.DOCUMENT
         assert len(node.children) == 2
         assert node.children[0].tag == Tag.HEADING1
@@ -129,7 +139,7 @@ class TestDocumentNode:
         """Test from_json deserialization."""
         json_str = '{"tag": "P", "text": "Hello"}'
         node = DocumentNode.from_json(json_str)
-        
+
         assert node.tag == Tag.PARAGRAPH
         assert node.text == "Hello"
         assert node.children == []
@@ -139,10 +149,10 @@ class TestDocumentNode:
         original = DocumentNode(Tag.DOCUMENT)
         original.children.append(DocumentNode(Tag.HEADING1, text="Title"))
         original.children.append(DocumentNode(Tag.PARAGRAPH, text="Content"))
-        
+
         json_str = original.to_json()
         restored = DocumentNode.from_json(json_str)
-        
+
         assert restored.tag == original.tag
         assert len(restored.children) == len(original.children)
         assert restored.children[0].text == original.children[0].text
@@ -153,7 +163,7 @@ class TestDocumentNode:
         doc = DocumentNode(Tag.DOCUMENT)
         doc.children.append(DocumentNode(Tag.PARAGRAPH, text="Para 1"))
         doc.children.append(DocumentNode(Tag.HEADING1, text="Title"))
-        
+
         results = doc.collect_by_tag(Tag.HEADING1)
         assert len(results) == 1
         assert results[0].text == "Title"
@@ -164,7 +174,7 @@ class TestDocumentNode:
         doc.children.append(DocumentNode(Tag.PARAGRAPH, text="Para 1"))
         doc.children.append(DocumentNode(Tag.PARAGRAPH, text="Para 2"))
         doc.children.append(DocumentNode(Tag.HEADING1, text="Title"))
-        
+
         results = doc.collect_by_tag(Tag.PARAGRAPH)
         assert len(results) == 2
         assert results[0].text == "Para 1"
@@ -173,7 +183,7 @@ class TestDocumentNode:
     def test_collect_by_tag_nested(self, sample_document_tree):
         """Test collect_by_tag on a nested tree structure."""
         results = sample_document_tree.collect_by_tag(Tag.HEADING1)
-        
+
         # Should find both H1 nodes from the two sections
         assert len(results) == 2
         texts = [r.text for r in results]
@@ -184,7 +194,7 @@ class TestDocumentNode:
         """Test collect_by_tag with no matches."""
         doc = DocumentNode(Tag.DOCUMENT)
         doc.children.append(DocumentNode(Tag.PARAGRAPH, text="Para"))
-        
+
         results = doc.collect_by_tag(Tag.FIGURE)
         assert results == []
 
@@ -195,7 +205,7 @@ class TestDocumentNode:
         doc.children.append(DocumentNode(Tag.PARAGRAPH, text=""))
         # Node with text
         doc.children.append(DocumentNode(Tag.PARAGRAPH, text="Content"))
-        
+
         results = doc.collect_by_tag(Tag.PARAGRAPH)
         # Should only find the one with text
         assert len(results) == 1
@@ -204,7 +214,7 @@ class TestDocumentNode:
     def test_collect_by_tag_list_items(self, sample_document_tree):
         """Test collect_by_tag on list items."""
         results = sample_document_tree.collect_by_tag(Tag.LIST_ITEM)
-        
+
         assert len(results) == 2
         texts = [r.text for r in results]
         assert "Item 1" in texts
