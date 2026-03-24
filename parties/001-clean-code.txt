@@ -1,0 +1,208 @@
+
+         ~  *  ~     CONGRATULATIONS!     ~  *  ~
+      *       .  *   The code is clean!  *   .      *
+   ~     *        ~                    ~       *     ~
+  *   .        *    .      *      .       *       .   *
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                    THE GREAT CAT PARTY
+                    ~~~~~~~~~~~~~~~~~~~
+
+         Hosted by the kittens of altex
+         in celebration of tidy code
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+              /\_/\          /\_/\
+             ( o.o )        ( ^.^ )
+              > ^ <          > ~ <
+             /|   |\        /|   |\
+            (_|   |_)      (_|   |_)
+
+           Whiskers         Patches
+
+     "I knocked the dead     "The _HTML_MAP is
+      code off the table.     so much cleaner now.
+      You're welcome."        I can see myself in it."
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            ~*~  STREAMERS AND STRING  ~*~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+     ~~~~~~~\       /~~~~~~~\       /~~~~~~~\       /~~~~~~~
+              \   /           \   /           \   /
+               \_/             \_/             \_/
+
+                         /\_/\
+                        ( o.o )  ~~~~~
+                     ~~~( >  < )
+                    /    |/  \|    ~~~~
+                   ~~~   |    |  /
+                         (    ) ~~~~     <=== yarn!
+                          \  /
+                           \/
+
+                        Mittens
+
+            "I found a loose thread in the
+             codebase and I PULLED IT.
+             ...it was just yarn though."
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              THE DANCE FLOOR
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    *  .  *  .  *  .  *  .  *  .  *  .  *  .  *  .  *  .  *
+
+         /\_/\                          /\_/\
+        ( -.- )    /\_/\               ( o.o )
+         > ^ <    ( ^.^ )    /\_/\      > v <
+        /     \    > w <    ( >.< )    /     \
+                  /     \    > ^ <
+                            /     \
+
+    *  .  *  .  *  .  *  .  *  .  *  .  *  .  *  .  *  .  *
+
+    Socks:    "Is that a secure_filename I smell?"
+    Patches:  "That's the tuna."
+    Socks:    "Oh. Still good."
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              STRING THEORY (by Professor Whiskers)
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+                   ,  ,
+                  (  oo )       "According to my research,
+                 _\  - /_       string is best when it has
+                / \    / \      no loose ends.
+               / /|    |\ \
+              /_/ |    | \_\    Like this codebase."
+                  (    )
+                 / \  / \
+                /   \/   \
+               ~    ~~    ~
+              ~~~  ~~~~  ~~~
+             ~~~~~ ~~~~~~ ~~~~
+            ~~~ yarn trail ~~~~
+           ~~~~~~ across ~~~~~~~
+          ~~~~ the floor ~~~~~~~~
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               THE DOCUMENTARY REVIEW
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+          /\_/\    ___________
+         ( o.o )  |           |
+          > ^ <   |  AGENTS   |
+         / | | \  |   .md     |
+        /  | |  \ |___________|
+           | |
+          _| |_
+
+              Tabby
+
+     "I reviewed the documentation.
+      It says I should never commit.
+
+      I mean to git.
+
+      I commit to naps daily."
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                PARTY SNACKS TABLE
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      .--------.  .--------.  .--------.  .--------.
+      | TUNA   |  | SALMON |  | CREAM  |  | MORE   |
+      | PUFFS  |  | BITES  |  | PUFFS  |  | TUNA   |
+      '--------'  '--------'  '--------'  '--------'
+
+                     /\_/\
+                    ( *o* )    "Is that...
+                     >   <     a WHOLE salmon?"
+                    /|   |\
+                      | |
+                      | |          /\_/\
+                      |_|         ( -.- )  "no. sit down."
+                                   > ^ <
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             LATE NIGHT CODING SESSION
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+          /\_/\    .------------------.
+         ( o.o )   |  $ python -m     |
+          > ^ <    |    altex ...     |
+         /|   |\   |  Tagged PDF     |
+        | |   | |  |  written to     |
+        |_|   |_|  |  /tmp/out.pdf   |
+                   '------------------'
+           Luna
+
+     "1,450 lines of Python.
+      70 lines of JavaScript.
+      0 lines of nonsense.
+
+      ...well, except for
+      this cat party."
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           THE GRAND FINALE - CONFETTI!
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *
+ + *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  + *
+  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .
+
+      /\_/\     /\_/\     /\_/\     /\_/\     /\_/\
+     ( ^.^ )   ( o.o )   ( >.< )   ( -.- )   ( ^.^ )
+      > v <     > ^ <     > w <     > ~ <     > ^ <
+
+  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .
+ + *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  + *
+  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *
+
+
+     ALL CATS IN UNISON:
+
+       "The code is clean!
+        The docs are true!
+        No hyperbole in sight!
+        And the Dockerfile
+        doesn't run as root!"
+
+
+  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *
+
+                    THE END
+
+               /\_/\
+              ( -.- )  zzz
+               > ~ <
+              /|   |\
+             | |   | |
+             |_|   |_|
+
+          "Wake me when there's
+           a new feature request."
+
+  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -3,6 +3,21 @@
 This document provides context for any AI agent or developer picking up
 work on the **altex** project.  Read this first.
 
+## Rules for Agents
+
+1. **Never commit to git.**  All commits must be human-reviewed and made
+   by the human.  Agents modify the working tree only.
+
+2. **Never push to GitHub.**  The human controls all remote operations.
+
+3. **Ask before executing.**  Present plans for review before making
+   changes.
+
+4. **Cat party required.**  Every major change must include a new cat
+   party text file in `parties/`.  Name it `NNN-short-description.txt`
+   where NNN is the next sequential number.  Run `python3 cat_party.py`
+   to verify it displays correctly.
+
 ## Project Summary
 
 **altex** is a proof-of-concept tool that post-processes LaTeX-generated
@@ -73,7 +88,7 @@ docs/                      # Project documentation
 
 demos/                     # Demo scripts (run against benchmarks/)
 |-- demo_compare.sh        # Before/after comparison
-|-- demo_math_alttext.sh   # Math formula alt-text showcase
+|-- demo_math_alttext.sh   # Math formula alt-text demo
 |-- demo_math_speech.sh    # Math-to-speech engine comparison
 |-- demo_alt_document.sh   # Embedded alternative HTML demo
 `-- demo_tag_all.sh        # Batch-tag representative benchmark docs
@@ -86,6 +101,10 @@ benchmarks/                # PDF/UA benchmark corpus (.tex + .pdf pairs)
 |-- paper/                 # Papers and lecture notes
 |-- syllabus/              # Course syllabi
 `-- manifest.json          # Metadata for all benchmark documents
+
+parties/                   # Cat party archive (one per major change)
+|-- 001-clean-code.txt     # First party: code cleanup celebration
+`-- ...                    # python3 cat_party.py to view latest
 ```
 
 ## How to Build and Run

@@ -1,0 +1,162 @@
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      *  .  *  .  *  .  *  .  *  .  *  .  *  .  *  .  *  .
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+               THE PARTY SYSTEM PARTY
+               ~~~~~~~~~~~~~~~~~~~~~~
+
+          "We heard you liked parties,
+           so we put parties in your parties."
+
+                     /\_/\
+                    ( o.o )
+                     > ^ <    <--- Party Director
+                    /|   |\
+                   | |   | |
+                   |_|   |_|
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                  THE FILING CABINET
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+          /\_/\
+         ( o.o )   .----------------------------.
+          > ^ <    | parties/                    |
+         /|   |\   |   001-clean-code.txt        |
+        | |   | |  |   002-party-system.txt  <-- |
+        |_|   |_|  '----------------------------'
+
+              Archivist Cat
+
+    "Every major change deserves a party.
+     Every party deserves a filing system.
+
+     I have labeled the folders.
+     I have sorted by number.
+     This is the best day of my life."
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              THE REWIND FEATURE
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+        .-------.     .-------.     .-------.
+        | <<    |     |  NOW  |     |    >> |
+        |rewind |     |       |     | (no)  |
+        '-------'     '-------'     '-------'
+
+              /\_/\
+             ( >.< )   "You can go BACK IN TIME
+              > w <     through old parties?!
+             /|   |\
+                        That means the clean code
+                        party will live FOREVER?"
+
+              /\_/\
+             ( -.- )   "Yes. That is how
+              > ^ <     files work."
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               THE RULE
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    .---------------------------------------------------.
+    |                                                   |
+    |   AGENTS.md, Section: Rules for Agents            |
+    |                                                   |
+    |   4. Every major change MUST be accompanied       |
+    |      by a cat party in parties/.                  |
+    |                                                   |
+    |      This is not optional.                        |
+    |      This is engineering discipline.              |
+    |                                                   |
+    '---------------------------------------------------'
+
+              /\_/\           /\_/\
+             ( ^.^ )         ( ^.^ )
+              > v <           > v <
+             /|   |\         /|   |\
+
+    Policy Cat         Compliance Cat
+
+    "We wrote it        "It's in the
+     in the docs.        docs. It's
+     It's official."     official."
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             THE COMMAND LINE DEMO
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    .--------------------------------------------.
+    |  $ python3 cat_party.py                    |
+    |  (shows latest party)                      |
+    |                                            |
+    |  $ python3 cat_party.py --rewind 1         |
+    |  (shows the previous party)                |
+    |                                            |
+    |  $ python3 cat_party.py --list             |
+    |  (lists all available parties)             |
+    '--------------------------------------------'
+
+                /\_/\
+               ( o.o )   "I can relive
+                > ^ <     ALL the parties?
+               /|   |\
+              | |   | |   ...
+              |_|   |_|
+                          I need a moment."
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+              THE RECURSIVE CELEBRATION
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +
+
+    We made a system for parties.
+    Then we threw a party for the system.
+    The party is stored in the system.
+    The system was the reason for the party.
+
+  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .
+
+      /\_/\    /\_/\    /\_/\    /\_/\    /\_/\
+     ( ^.^ )  ( o.o )  ( >.< )  ( -.- )  ( ^.^ )
+      > v <    > ^ <    > w <    > ~ <    > ^ <
+
+  ALL CATS: "It's parties all the way down!"
+
+  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +
+
+---PAUSE---
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                     /\_/\
+                    ( -.- )  zzz
+                     > ~ <
+                    /|   |\
+                   | |   | |
+                   |_|   |_|
+
+            "Wake me for the next
+             major change."
+
+                  parties: 2
+              and counting...
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *  .  +  *
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
