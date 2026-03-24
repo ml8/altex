@@ -26,9 +26,6 @@ _HTML_MAP: dict[Tag, str] = {
     Tag.HEADING3: "h3",
     Tag.HEADING4: "h4",
     Tag.PARAGRAPH: "p",
-    Tag.LIST: "ul",
-    Tag.LIST_ITEM: "li",
-    Tag.CODE: "pre",
 }
 
 
@@ -116,8 +113,8 @@ def _render_formula(node: DocumentNode) -> str:
     text = node.text or ""
     try:
         import latex2mathml.converter as l2m
-        from altex.math_speech import _strip_delimiters
-        clean = _strip_delimiters(text)
+        from altex.math_speech import strip_delimiters
+        clean = strip_delimiters(text)
         mathml = l2m.convert(clean)
         return f'<span role="math" aria-label="{escape(text)}">{mathml}</span>'
     except Exception:

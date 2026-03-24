@@ -66,13 +66,12 @@ def _engine_sre(formulas: list[str]) -> list[str]:
     mathml_lines = []
     for f in formulas:
         try:
-            clean = _strip_delimiters(f)
+            clean = strip_delimiters(f)
             mathml_lines.append(l2m.convert(clean))
         except Exception:
             mathml_lines.append("")
 
-    speech = _run_worker("sre_worker.js", mathml_lines, formulas)
-    return speech
+    return _run_worker("sre_worker.js", mathml_lines, formulas)
 
 
 # ---------------------------------------------------------------------------
@@ -82,7 +81,7 @@ def _engine_sre(formulas: list[str]) -> list[str]:
 
 def _engine_mathjax(formulas: list[str]) -> list[str]:
     """LaTeX → speech via mathjax-full + SRE Node subprocess."""
-    cleaned = [_strip_delimiters(f) for f in formulas]
+    cleaned = [strip_delimiters(f) for f in formulas]
     return _run_worker("mathjax_worker.js", cleaned, formulas)
 
 
@@ -139,7 +138,7 @@ def _run_worker(
 # ---------------------------------------------------------------------------
 
 
-def _strip_delimiters(latex: str) -> str:
+def strip_delimiters(latex: str) -> str:
     """Remove surrounding $ or \\[...\\] delimiters from a LaTeX string."""
     s = latex.strip()
     if s.startswith("$$") and s.endswith("$$"):
