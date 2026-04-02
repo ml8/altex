@@ -1,12 +1,79 @@
 # altex
 
 **altex** — a proof-of-concept tool that post-processes LaTeX-generated PDFs
-to embed accessibility structure tags and alt-text.
+to embed accessibility structure tags and alt-text. Hobby project in response to
+new ADA Title II regulations and lack of LaTeX tools for PDF accessibility.
+
+Live at [altex.ml8.sh](https://altex.ml8.sh) for demo (or to make your documents
+accessible).
 
 Validated against [verapdf](https://verapdf.org/) (an
 open-source PDF/UA validator): across 28 test documents, altex reduces
 verapdf failures from **57,914 → 1,272** (97.8% reduction), with 8
 documents achieving full PDF/UA-1 compliance.
+
+## What it does
+
+1. **Parses LaTeX source** — extracts semantic structure (sections, headings,
+   lists, math, code blocks, figures, links) into a document tree.
+2. **Embeds PDF structure tags** — writes a PDF structure tree with proper
+   hierarchy, `/ActualText` for text, `/Alt` for formulas, code, and figures.
+3. **Tags content streams** — wraps each text operator (Tj/TJ) in its own
+   BDC/EMC marked-content sequence with a unique MCID.  Non-text content
+   (graphics, decorative rules) is marked as `/Artifact`.
+4. **Links annotations** — PDF link annotations (`\href`, `\url`) are tagged
+   as `/Link` structure elements with alt descriptions.
+5. **Sets accessibility metadata** — document language, title, tab order,
+   viewer preferences, PDF/UA-1 identification.
+6. **Fixes font encoding** (default, requires Ghostscript) — normalizes font
+   encodings for better character mapping.  Use `--no-fix-encoding` to skip.
+
+## Supported LaTeX commands
+
+| Category   | Commands                                                  |
+|------------|-----------------------------------------------------------|
+| Sections   | `\section`, `\subsection`, `\subsubsection`, `\paragraph` (and starred `*` variants) |
+| Lists      | `\begin{itemize}`, `\begin{enumerate}`, `\begin{description}`, `\item` |
+| Math       | `$...$`, `\[...\]`, `equation`, `align`, `gather` (and starred variants) |
+| Code       | `verbatim`, `lstlisting`, `minted`                        |
+| Figures    | `\begin{figure}`, `\includegraphics`, `\caption`          |
+| Links      | `\href{url}{text}`, `\url{url}`                           |
+| Includes   | `\input{}`, `\include{}`                                  |
+
+Unknown macros are handled generically by extracting readable text from
+their arguments.
+
+## PDF/UA validation
+
+altex addresses these [PDF/UA-1](https://pdfa.org/resource/iso-14289-pdfua/)
+requirements (verified by [verapdf](https://verapdf.org/)):
+
+<!-- [[TUI]] -->
+```
+$ verapdf -f ua1 benchmarks/homework/bu-cs237-hw.pdf
+  Passed rules: 99
+  Failed rules: 7
+  Failed checks: 976
+    [7.21.7:1] x2: The Font dictionary of all fonts shall define the map of all used
+    [7.1:3] x495: Content shall be marked as Artifact or tagged as real content
+    [7.1:11] x1: The logical structure of the conforming file shall be described b
+    [7.1:8] x1: The Catalog dictionary of a conforming file shall contain the Met
+    [6.2:1] x1: The document catalog dictionary shall include a MarkInfo dictiona
+    [7.1:10] x1: The document catalog dictionary shall include a ViewerPreferences
+    [7.2:34] x475: Natural language for text in page content shall be determined
+
+$ python -m altex benchmarks/homework/bu-cs237-hw.tex benchmarks/homework/bu-cs237-hw.pdf -o tagged.pdf
+Tagged PDF written to tagged.pdf
+
+$ verapdf -f ua1 tagged.pdf
+  Passed rules: 105
+  Failed rules: 1
+  Failed checks: 5
+    [7.21.7:1] x5: The Font dictionary of all fonts shall define the map of all used
+```
+<!-- [[/TUI]] -->
+
+Run `make benchmark` to validate all 17 test documents.
 
 ## Usage
 
@@ -46,37 +113,6 @@ python -m altex source.tex input.pdf --no-fix-encoding -o output.pdf
 python -m altex source.tex --dump-tree
 ```
 
-## What it does
-
-1. **Parses LaTeX source** — extracts semantic structure (sections, headings,
-   lists, math, code blocks, figures, links) into a document tree.
-2. **Embeds PDF structure tags** — writes a PDF structure tree with proper
-   hierarchy, `/ActualText` for text, `/Alt` for formulas, code, and figures.
-3. **Tags content streams** — wraps each text operator (Tj/TJ) in its own
-   BDC/EMC marked-content sequence with a unique MCID.  Non-text content
-   (graphics, decorative rules) is marked as `/Artifact`.
-4. **Links annotations** — PDF link annotations (`\href`, `\url`) are tagged
-   as `/Link` structure elements with alt descriptions.
-5. **Sets accessibility metadata** — document language, title, tab order,
-   viewer preferences, PDF/UA-1 identification.
-6. **Fixes font encoding** (default, requires Ghostscript) — normalizes font
-   encodings for better character mapping.  Use `--no-fix-encoding` to skip.
-
-## Supported LaTeX commands
-
-| Category   | Commands                                                  |
-|------------|-----------------------------------------------------------|
-| Sections   | `\section`, `\subsection`, `\subsubsection`, `\paragraph` (and starred `*` variants) |
-| Lists      | `\begin{itemize}`, `\begin{enumerate}`, `\begin{description}`, `\item` |
-| Math       | `$...$`, `\[...\]`, `equation`, `align`, `gather` (and starred variants) |
-| Code       | `verbatim`, `lstlisting`, `minted`                        |
-| Figures    | `\begin{figure}`, `\includegraphics`, `\caption`          |
-| Links      | `\href{url}{text}`, `\url{url}`                           |
-| Includes   | `\input{}`, `\include{}`                                  |
-
-Unknown macros are handled generically by extracting readable text from
-their arguments.
-
 ## CLI options
 
 ```
@@ -89,38 +125,6 @@ Options:
   --math-speech ENGINE  Math-to-speech engine: sre, mathjax, or none (default: none)
   --embed-alt           Embed an accessible HTML alternative as a PDF attachment
 ```
-
-## PDF/UA validation
-
-altex addresses these [PDF/UA-1](https://pdfa.org/resource/iso-14289-pdfua/)
-requirements (verified by [verapdf](https://verapdf.org/)):
-
-<!-- [[TUI]] -->
-```
-$ verapdf -f ua1 benchmarks/homework/bu-cs237-hw.pdf
-  Passed rules: 99
-  Failed rules: 7
-  Failed checks: 976
-    [7.21.7:1] x2: The Font dictionary of all fonts shall define the map of all used
-    [7.1:3] x495: Content shall be marked as Artifact or tagged as real content
-    [7.1:11] x1: The logical structure of the conforming file shall be described b
-    [7.1:8] x1: The Catalog dictionary of a conforming file shall contain the Met
-    [6.2:1] x1: The document catalog dictionary shall include a MarkInfo dictiona
-    [7.1:10] x1: The document catalog dictionary shall include a ViewerPreferences
-    [7.2:34] x475: Natural language for text in page content shall be determined
-
-$ python -m altex benchmarks/homework/bu-cs237-hw.tex benchmarks/homework/bu-cs237-hw.pdf -o tagged.pdf
-Tagged PDF written to tagged.pdf
-
-$ verapdf -f ua1 tagged.pdf
-  Passed rules: 105
-  Failed rules: 1
-  Failed checks: 5
-    [7.21.7:1] x5: The Font dictionary of all fonts shall define the map of all used
-```
-<!-- [[/TUI]] -->
-
-Run `make benchmark` to validate all 17 test documents.
 
 ## Web interface
 
