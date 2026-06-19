@@ -124,7 +124,19 @@
     <em>Note:</em> This is an automated tool. While it significantly improves accessibility compliance,
     complex documents may still require manual verification.
   </p>
-  
+
+  <h3>Privacy &amp; data handling</h3>
+  <p>
+    Your files are never written to a database. Each upload is processed in a temporary working
+    directory that is <strong>deleted as soon as the request finishes</strong> — on success or
+    error — so your <code>.tex</code>, <code>.pdf</code>, and all intermediate files are discarded
+    immediately (see the <code>finally</code> cleanup in
+    <a href="https://github.com/ml8/altex/blob/main/web/app.py#L244-L245" target="_blank">web/app.py</a>).
+    The default Docker deployment runs stateless (<code>ALTEX_STORAGE=inline</code>), streaming the
+    tagged PDF back in the response with nothing kept on the server; in local mode the result is
+    held only in an ephemeral temp directory that is cleared when the service restarts.
+  </p>
+
   <p>
     <a href="https://github.com/ml8/altex" target="_blank">View source on GitHub</a>
   </p>

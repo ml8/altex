@@ -150,6 +150,18 @@ The web UI shows:
   metadata status
 - **Download link** for the tagged PDF
 
+### Privacy & data handling
+
+Uploaded files are never written to a database. Each request runs in a
+temporary working directory that is deleted as soon as processing finishes —
+on success or error — so your `.tex`, `.pdf`, and all intermediate files are
+discarded immediately (see the `finally` cleanup in
+[`web/app.py`](web/app.py)). The Docker image runs stateless
+(`ALTEX_STORAGE=inline`), returning the tagged PDF directly in the response
+with nothing kept on the server; in the default `local` storage mode the
+result is held only in an ephemeral temp directory that is cleared when the
+service restarts.
+
 ## Kubernetes deployment
 
 The app is fully stateless and horizontally scalable. See
